@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: ver
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Verify system.json matches tag
+        run: |
+          TAG="${{ steps.ver.outputs.version }}"
+          MANIFEST=$(jq -r '.version' system.json)
+          if [ "$TAG" != "$MANIFEST" ]; then
+            echo "::error::Tag v$TAG non corrisponde a system.json ($MANIFEST)."
+            exit 1
+          fi
+          echo "Versione validata: $TAG"
+
+      - name: Build system.zip
+        run: |
+          zip -r system.zip . \
+            -x ".git/*" \
+            -x ".github/*" \
+            -x "tools/*" \
+            -x "*.md" \
+            -x "system.zip"
+          unzip -l system.zip | tail -20
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Daggerheart ITA v${{ steps.ver.outputs.version }}"
+          tag_name: "v${{ steps.ver.outputs.version }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            system.json
+            system.zip

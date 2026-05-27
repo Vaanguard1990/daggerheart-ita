@@ -13,6 +13,7 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     form:     { submitOnChange: true, closeOnSubmit: false },
     actions: {
       changeTab:       DaggerheartCharacterSheet._changeTab,
+      setRollMode:     DaggerheartCharacterSheet._setRollMode,
       tiraTratto:      DaggerheartCharacterSheet._tiraTratto,
       tiraArma:        DaggerheartCharacterSheet._tiraArma,
       tiraDanno:       DaggerheartCharacterSheet._tiraDanno,
@@ -34,6 +35,7 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
   };
 
   tabGroups = { primary: "main" };
+  rollMode = "normale";
 
   get title() {
     return this.actor?.name ?? "Personaggio";
@@ -51,6 +53,7 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       system: sys,
       config: DH,
       currentTab: this.tabGroups.primary,
+      rollMode: this.rollMode,
       // Items raggruppati
       armi:        items.filter(i => i.type === "weapon"),
       armature:    items.filter(i => i.type === "armor"),
@@ -90,12 +93,24 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     root.querySelectorAll(".dh-tab-content").forEach(c => c.classList.toggle("active", c.dataset.tabContent === tab));
   }
 
+  static _setRollMode(event, target) {
+    const mode = target.dataset.mode;
+    if (!mode || mode === this.rollMode) return;
+    this.rollMode = mode;
+    this.element.querySelectorAll(".dh-mode-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.mode === mode);
+    });
+  }
+
   static async _tiraTratto(event, target) {
+    let modo = this.rollMode === "normale" ? null : this.rollMode;
+    if (event.shiftKey) modo = "vantaggio";
+    else if (event.ctrlKey) modo = "svantaggio";
     return DualityRoll.tira({
       actor: this.actor,
       trattoKey: target.dataset.tratto,
       label: `Tiro ${DH.tratti[target.dataset.tratto]}`,
-      modo: event.shiftKey ? "vantaggio" : (event.ctrlKey ? "svantaggio" : null)
+      modo
     });
   }
 
@@ -104,11 +119,14 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     const it = this.actor.items.get(itemId);
     if (!it) return;
     const trattoMap = { "Agilità":"agilita","Forza":"forza","Astuzia":"astuzia","Istinto":"istinto","Presenza":"presenza","Conoscenza":"conoscenza" };
+    let modo = this.rollMode === "normale" ? null : this.rollMode;
+    if (event.shiftKey) modo = "vantaggio";
+    else if (event.ctrlKey) modo = "svantaggio";
     return DualityRoll.tira({
       actor: this.actor,
       trattoKey: trattoMap[it.system.tratto] ?? "agilita",
       label: `Attacco: ${it.name} (${it.system.portata})`,
-      modo: event.shiftKey ? "vantaggio" : (event.ctrlKey ? "svantaggio" : null)
+      modo
     });
   }
 

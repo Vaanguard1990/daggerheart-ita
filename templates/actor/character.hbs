@@ -32,7 +32,22 @@
 <section class="dh-tab-content {{#if (eq currentTab 'main')}}active{{/if}}" data-tab-content="main">
 
   <div class="dh-block">
-    <h3 class="dh-block-title">Tratti <span class="dh-info">Shift=vantaggio · Ctrl=svantaggio</span></h3>
+    <h3 class="dh-block-title">Tratti
+      <div class="dh-roll-mode" role="radiogroup" aria-label="Modalità tiro">
+        <button type="button" class="dh-mode-btn {{#if (eq rollMode 'svantaggio')}}active{{/if}}"
+                data-action="setRollMode" data-mode="svantaggio" title="Svantaggio (−1d6)">
+          <i class="fa-solid fa-circle-minus"></i> Svantaggio
+        </button>
+        <button type="button" class="dh-mode-btn {{#if (eq rollMode 'normale')}}active{{/if}}"
+                data-action="setRollMode" data-mode="normale" title="Tiro normale">
+          <i class="fa-solid fa-equals"></i> Normale
+        </button>
+        <button type="button" class="dh-mode-btn {{#if (eq rollMode 'vantaggio')}}active{{/if}}"
+                data-action="setRollMode" data-mode="vantaggio" title="Vantaggio (+1d6)">
+          <i class="fa-solid fa-circle-plus"></i> Vantaggio
+        </button>
+      </div>
+    </h3>
     <div class="dh-tratti-grid">
       {{#each trattiList as |t|}}
         <div class="dh-tratto-card">
@@ -124,8 +139,12 @@
   </div>
 
   <div class="dh-riposo">
-    <button type="button" class="dh-btn" data-action="shortRest"><i class="fa-solid fa-mug-saucer"></i> Riposo Breve</button>
-    <button type="button" class="dh-btn dh-btn-primary" data-action="longRest"><i class="fa-solid fa-bed"></i> Riposo Lungo</button>
+    <button type="button" class="dh-btn dh-btn-icon-only" data-action="shortRest" title="Riposo Breve" aria-label="Riposo Breve">
+      <i class="fa-solid fa-mug-saucer"></i>
+    </button>
+    <button type="button" class="dh-btn dh-btn-icon-only dh-btn-primary" data-action="longRest" title="Riposo Lungo" aria-label="Riposo Lungo">
+      <i class="fa-solid fa-bed"></i>
+    </button>
   </div>
 </section>
 

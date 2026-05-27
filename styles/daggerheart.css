@@ -481,3 +481,55 @@
   height: 22px;
   box-sizing: border-box;
 }
+
+/* === v0.1.7: segmented control modalità tiro === */
+.dh-roll-mode {
+  display: inline-flex;
+  border: 1px solid var(--dh-border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--dh-card);
+}
+.dh-roll-mode .dh-mode-btn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--dh-border);
+  padding: .25rem .55rem;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--dh-fg-dim);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  font-family: inherit;
+  transition: all .12s;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  line-height: 1.2;
+}
+.dh-roll-mode .dh-mode-btn:last-child { border-right: none; }
+.dh-roll-mode .dh-mode-btn:hover {
+  background: var(--dh-bg-3);
+  color: var(--dh-fg);
+}
+.dh-roll-mode .dh-mode-btn.active {
+  background: var(--dh-gold);
+  color: #fff;
+}
+.dh-roll-mode .dh-mode-btn:focus { outline: none; }
+
+/* === v0.1.7: bottoni icona-only === */
+.dh-btn-icon-only {
+  padding: .35rem .55rem !important;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dh-btn-icon-only i { margin: 0; }
+.dh-riposo {
+  justify-content: flex-end !important;
+  gap: .35rem !important;
+}
+.dh-riposo .dh-btn-icon-only { flex: 0 0 auto !important; }

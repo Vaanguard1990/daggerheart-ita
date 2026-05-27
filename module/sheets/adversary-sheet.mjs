@@ -29,6 +29,10 @@ export class DaggerheartAdversarySheet extends HandlebarsApplicationMixin(ActorS
 
   tabGroups = { primary: "stats" };
 
+  get title() {
+    return this.actor?.name ?? "Avversario";
+  }
+
   async _prepareContext() {
     const sys = this.actor.system;
     const range = n => Array.from({ length: Math.max(0, n|0) }, (_, i) => i);

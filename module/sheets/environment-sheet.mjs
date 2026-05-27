@@ -24,6 +24,10 @@ export class DaggerheartEnvironmentSheet extends HandlebarsApplicationMixin(Acto
 
   tabGroups = { primary: "overview" };
 
+  get title() {
+    return this.actor?.name ?? "Ambiente";
+  }
+
   async _prepareContext() {
     const sys = this.actor.system;
     return {

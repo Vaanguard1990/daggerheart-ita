@@ -2,7 +2,7 @@
   "id": "daggerheart-ita",
   "title": "Daggerheart (ITA)",
   "description": "Sistema italiano per Daggerheart di Darrington Press. Include schede PG, avversari, ambienti, tiri Duality automatici (Speranza/Paura), e dati SRD localizzati (classi, sottoclassi, discendenze, comunità, dominî, armi, armature, avversari, ambienti). Non ufficiale. Tutti i diritti del materiale di gioco appartengono a Darrington Press.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "compatibility": {
     "minimum": "13",
     "verified": "14",

@@ -1,0 +1,19 @@
+<div class="dh-grid-2">
+  <label>Tier <input type="number" name="system.tier" value="{{system.tier}}" min="1" max="4"/></label>
+  <label>Evasione <input type="number" name="system.evasione" value="{{system.evasione}}"/></label>
+</div>
+<fieldset><legend>Tratti</legend>
+  <div class="dh-grid-3">
+    {{#each config.tratti as |label key|}}
+      <label>{{label}} <input type="number" name="system.tratti.{{key}}" value="{{lookup ../system.tratti key}}"/></label>
+    {{/each}}
+  </div>
+</fieldset>
+<fieldset><legend>Attacco</legend>
+  <label>Nome <input type="text" name="system.attacco.nome" value="{{system.attacco.nome}}"/></label>
+  <label>Portata <input type="text" name="system.attacco.portata" value="{{system.attacco.portata}}"/></label>
+  <label>Danno <input type="text" name="system.attacco.danno" value="{{system.attacco.danno}}"/></label>
+</fieldset>
+<label class="dh-full">Caratteristiche
+  <textarea name="system.caratteristiche" rows="4">{{system.caratteristiche}}</textarea>
+</label>

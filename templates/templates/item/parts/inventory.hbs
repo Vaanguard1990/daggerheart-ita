@@ -1,0 +1,13 @@
+<div class="dh-grid-2">
+  <label>Quantità <input type="number" name="system.quantita" value="{{system.quantita}}" min="0"/></label>
+  <label>Costo
+    <span style="display:flex; gap: .25rem;">
+      <input type="number" name="system.costo.valore" value="{{system.costo.valore}}" min="0"/>
+      <select name="system.costo.tipo">
+        <option {{#if (eq system.costo.tipo "manciata")}}selected{{/if}}>manciata</option>
+        <option {{#if (eq system.costo.tipo "sacco")}}selected{{/if}}>sacco</option>
+        <option {{#if (eq system.costo.tipo "scrigno")}}selected{{/if}}>scrigno</option>
+      </select>
+    </span>
+  </label>
+</div>

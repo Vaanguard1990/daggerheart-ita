@@ -1,0 +1,53 @@
+{
+  "DH.Sistema": "Daggerheart (ITA)",
+
+  "TYPES.Actor.character":   "Personaggio",
+  "TYPES.Actor.adversary":   "Avversario",
+  "TYPES.Actor.environment": "Ambiente",
+
+  "TYPES.Item.ancestry":    "Discendenza",
+  "TYPES.Item.community":   "Comunità",
+  "TYPES.Item.class":       "Classe",
+  "TYPES.Item.subclass":    "Sottoclasse",
+  "TYPES.Item.domainCard":  "Carta Dominio",
+  "TYPES.Item.weapon":      "Arma",
+  "TYPES.Item.armor":       "Armatura",
+  "TYPES.Item.feature":     "Privilegio",
+  "TYPES.Item.experience":  "Esperienza",
+  "TYPES.Item.consumable":  "Scorta",
+  "TYPES.Item.inventory":   "Oggetto",
+  "TYPES.Item.beastForm":   "Forma Bestiale",
+
+  "DH.Tratto.agilita":    "Agilità",
+  "DH.Tratto.forza":      "Forza",
+  "DH.Tratto.astuzia":    "Astuzia",
+  "DH.Tratto.istinto":    "Istinto",
+  "DH.Tratto.presenza":   "Presenza",
+  "DH.Tratto.conoscenza": "Conoscenza",
+
+  "DH.Portata.Mischia":     "Mischia",
+  "DH.Portata.Prossima":    "Prossima",
+  "DH.Portata.Ravvicinata": "Ravvicinata",
+  "DH.Portata.Lontana":     "Lontana",
+  "DH.Portata.Remota":      "Remota",
+
+  "DH.Risorsa.pf":       "Punti Ferita",
+  "DH.Risorsa.stress":   "Stress",
+  "DH.Risorsa.speranza": "Speranza",
+  "DH.Risorsa.paura":    "Paura",
+  "DH.Risorsa.armatura": "Caselle Armatura",
+
+  "DH.Difesa.evasione":        "Evasione",
+  "DH.Difesa.sogliaMaggiore":  "Soglia Maggiore",
+  "DH.Difesa.sogliaGrave":     "Soglia Grave",
+
+  "DH.Tiro.duality":     "Tiro Duality",
+  "DH.Tiro.conSperanza": "con Speranza",
+  "DH.Tiro.conPaura":    "con Paura",
+  "DH.Tiro.critico":     "Critico",
+
+  "DH.UI.RiposoBreve":   "Riposo Breve",
+  "DH.UI.RiposoLungo":   "Riposo Lungo",
+  "DH.UI.ImportaSRD":    "Importa SRD",
+  "DH.UI.SperanzaPaura": "Speranza & Paura"
+}

@@ -2,7 +2,7 @@
   "id": "daggerheart-ita",
   "title": "Daggerheart (ITA)",
   "description": "Sistema italiano per Daggerheart di Darrington Press. Include schede PG, avversari, ambienti, tiri Duality automatici (Speranza/Paura), e dati SRD localizzati (classi, sottoclassi, discendenze, comunità, dominî, armi, armature, avversari, ambienti). Non ufficiale. Tutti i diritti del materiale di gioco appartengono a Darrington Press.",
-  "version": "0.1.8",
+  "version": "0.1.6",
   "compatibility": {
     "minimum": "13",
     "verified": "14",
@@ -11,15 +11,11 @@
   "authors": [
     {
       "name": "Giuseppe Santostasi",
-      "url": "https://github.com/Vaanguard1990"
+      "url": "https://github.com/giuseppesantostasi90-lang"
     }
   ],
-  "esmodules": [
-    "module/daggerheart.mjs"
-  ],
-  "styles": [
-    "styles/daggerheart.css"
-  ],
+  "esmodules": ["module/daggerheart.mjs"],
+  "styles": ["styles/daggerheart.css"],
   "languages": [
     {
       "lang": "it",
@@ -31,81 +27,28 @@
   "documentTypes": {
     "Actor": {
       "character": {
-        "htmlFields": [
-          "details.bio",
-          "details.notes"
-        ]
+        "htmlFields": ["details.bio", "details.notes"]
       },
       "adversary": {
-        "htmlFields": [
-          "description"
-        ]
+        "htmlFields": ["description"]
       },
       "environment": {
-        "htmlFields": [
-          "description"
-        ]
+        "htmlFields": ["description"]
       }
     },
     "Item": {
-      "ancestry": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "community": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "class": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "subclass": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "domainCard": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "weapon": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "armor": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "feature": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "experience": {
-        "htmlFields": []
-      },
-      "consumable": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "inventory": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "beastForm": {
-        "htmlFields": [
-          "description"
-        ]
-      }
+      "ancestry": { "htmlFields": ["description"] },
+      "community": { "htmlFields": ["description"] },
+      "class": { "htmlFields": ["description"] },
+      "subclass": { "htmlFields": ["description"] },
+      "domainCard": { "htmlFields": ["description"] },
+      "weapon": { "htmlFields": ["description"] },
+      "armor": { "htmlFields": ["description"] },
+      "feature": { "htmlFields": ["description"] },
+      "experience": { "htmlFields": [] },
+      "consumable": { "htmlFields": ["description"] },
+      "inventory": { "htmlFields": ["description"] },
+      "beastForm": { "htmlFields": ["description"] }
     }
   },
   "grid": {
@@ -114,7 +57,7 @@
   },
   "primaryTokenAttribute": "pf",
   "secondaryTokenAttribute": "stress",
-  "url": "https://github.com/Vaanguard1990/daggerheart-ita",
-  "manifest": "https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.json",
-  "download": "https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.zip"
+  "url": "https://github.com/giuseppesantostasi90-lang/daggerheart-ita",
+  "manifest": "https://github.com/giuseppesantostasi90-lang/daggerheart-ita/releases/latest/download/system.json",
+  "download": "https://github.com/giuseppesantostasi90-lang/daggerheart-ita/releases/latest/download/system.zip"
 }

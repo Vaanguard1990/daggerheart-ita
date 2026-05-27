@@ -35,10 +35,6 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
 
   tabGroups = { primary: "main" };
 
-  get title() {
-    return this.actor?.name ?? "Personaggio";
-  }
-
   async _prepareContext(options) {
     const sys = this.actor.system;
     const items = this.actor.items;

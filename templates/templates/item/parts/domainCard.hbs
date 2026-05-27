@@ -1,0 +1,16 @@
+<div class="dh-grid-2">
+  <label>Dominio
+    <select name="system.dominio">
+      {{#each config.domini as |d|}}<option value="{{d}}" {{#if (eq d ../system.dominio)}}selected{{/if}}>{{d}}</option>{{/each}}
+    </select>
+  </label>
+  <label>Livello <input type="number" name="system.livello" value="{{system.livello}}" min="1" max="10"/></label>
+  <label>Tipo
+    <select name="system.tipo">
+      <option {{#if (eq system.tipo "Privilegio")}}selected{{/if}}>Privilegio</option>
+      <option {{#if (eq system.tipo "Incantesimo")}}selected{{/if}}>Incantesimo</option>
+      <option {{#if (eq system.tipo "Abilità")}}selected{{/if}}>Abilità</option>
+    </select>
+  </label>
+  <label>Ricarica <input type="text" name="system.ricarica" value="{{system.ricarica}}" placeholder="es. Riposo Breve / Lungo"/></label>
+</div>

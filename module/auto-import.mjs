@@ -66,11 +66,13 @@ async function applyItemToActor(actor, item, fonteLabel) {
   if (item.type === "class") {
     if (Number.isFinite(sys.evasioneBase)) updates["system.evasione.value"] = sys.evasioneBase;
     if (Number.isFinite(sys.pfBase))       updates["system.pf.max"]         = sys.pfBase;
-    if (Number.isFinite(sys.stressBase))   updates["system.stress.max"]     = sys.stressBase;
-    if (Number.isFinite(sys.speranzaBase)) {
-      updates["system.speranza.max"]   = 6;
-      updates["system.speranza.value"] = sys.speranzaBase;
-    }
+    // Soglie da classe (Moderato = Soglia Maggiore, Grave = Soglia Grave)
+    const sd = sys.soglieDanno ?? {};
+    if (Number.isFinite(sd.Moderato)) updates["system.soglie.maggiore"] = sd.Moderato;
+    if (Number.isFinite(sd.Grave))    updates["system.soglie.grave"]    = sd.Grave;
+    updates["system.stress.max"] = 6;
+    updates["system.speranza.max"] = 6;
+    updates["system.speranza.value"] = 2;
   }
 
   await actor.update(updates);
@@ -88,17 +90,38 @@ async function applyItemToActor(actor, item, fonteLabel) {
   };
 
   if (item.type === "class") {
-    push(sys.privilegioClasse?.nome, sys.privilegioClasse?.descrizione, "Classe");
-    push(sys.movimentoSpe?.nome,     sys.movimentoSpe?.descrizione,     "Movimento");
+    if (sys.privilegioSperanza?.nome) {
+      push(`[Speranza] ${sys.privilegioSperanza.nome}`, sys.privilegioSperanza.descrizione, "Classe");
+    }
+    for (const p of (sys.privilegiClasse ?? [])) {
+      push(p.nome, p.descrizione, "Classe");
+    }
   }
   if (item.type === "subclass") {
-    push(sys.fondamento?.nome,        sys.fondamento?.descrizione,        "Fondamento");
-    if (sys.specializzazione?.nome) push(`[Specializzazione] ${sys.specializzazione.nome}`, sys.specializzazione.descrizione, "Specializzazione");
-    if (sys.maestria?.nome)          push(`[Maestria] ${sys.maestria.nome}`, sys.maestria.descrizione, "Maestria");
+    const lv = actor.system.livello?.value ?? 1;
+    for (const p of (sys.base ?? [])) {
+      push(p.nome, p.descrizione, "Fondamento");
+    }
+    if (lv >= (sys.livelloSpec ?? 2)) {
+      for (const p of (sys.spec ?? [])) {
+        push(`[Specializzazione] ${p.nome}`, p.descrizione, "Specializzazione");
+      }
+    }
+    if (lv >= (sys.livelloMaestria ?? 5)) {
+      for (const p of (sys.maestria ?? [])) {
+        push(`[Maestria] ${p.nome}`, p.descrizione, "Maestria");
+      }
+    }
   }
   if (item.type === "ancestry") {
-    push(sys.tratto1?.nome, sys.tratto1?.descrizione, "Discendenza");
-    push(sys.tratto2?.nome, sys.tratto2?.descrizione, "Discendenza");
+    for (const t of (sys.tratti ?? [])) {
+      push(t.nome, t.descrizione, "Discendenza");
+    }
+    // fallback se sono in formato tratto1/tratto2
+    if (!sys.tratti?.length) {
+      push(sys.tratto1?.nome, sys.tratto1?.descrizione, "Discendenza");
+      push(sys.tratto2?.nome, sys.tratto2?.descrizione, "Discendenza");
+    }
   }
   if (item.type === "community") {
     push(sys.privilegio?.nome, sys.privilegio?.descrizione, "Comunità");

@@ -83,5 +83,5 @@ git push origin "v!NEW_VERSION!"
 echo.
 echo Rilascio avviato per v!NEW_VERSION!
 echo GitHub Actions sta creando la release.
-echo Controlla: https://github.com/giuseppesantostasi90-lang/daggerheart-ita/actions
+echo Controlla: https://github.com/Vaanguard1990/daggerheart-ita/actions
 endlocal

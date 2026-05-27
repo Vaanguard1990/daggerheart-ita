@@ -1,0 +1,126 @@
+<div class="dh-sheet-root">
+{{!-- HEADER --}}
+<header class="dh-adv-header" style="border-left-color: {{tipoColore}};">
+  <div class="dh-adv-portrait"><img src="{{actor.img}}" data-edit="img"/></div>
+  <div class="dh-id">
+    <input type="text" name="name" value="{{actor.name}}" class="dh-adv-nome"/>
+    <div class="dh-adv-meta">
+      <label>Tipo
+        <select name="system.tipo">
+          {{#each config.tipiAvversario as |t|}}<option value="{{t}}" {{#if (eq t ../system.tipo)}}selected{{/if}}>{{t}}</option>{{/each}}
+        </select>
+      </label>
+      <label>Rango <input type="number" name="system.rango" value="{{system.rango}}" min="1" max="4"/></label>
+      <label>Diff. <input type="number" name="system.difficolta" value="{{system.difficolta}}"/></label>
+    </div>
+  </div>
+</header>
+
+{{!-- TABS --}}
+<nav class="dh-tabs">
+  {{#each tabs as |t|}}
+    <a class="dh-tab {{#if t.active}}active{{/if}}" data-action="changeTab" data-tab="{{t.id}}">
+      <i class="fa-solid {{t.icon}}"></i> {{t.label}}
+    </a>
+  {{/each}}
+</nav>
+
+{{!-- TAB: STATISTICHE --}}
+<section class="dh-tab-content {{#if (eq currentTab 'stats')}}active{{/if}}" data-tab-content="stats">
+  <div class="dh-block">
+    <h3 class="dh-block-title">Tracce</h3>
+    <div class="dh-tracks-grid">
+      <div class="dh-track">
+        <h4>PF <span class="dh-track-num">{{system.pf.value}}/{{system.pf.max}}</span></h4>
+        <div class="dh-cells-row">
+          {{#each cellsPf as |c|}}
+            <span class="dh-cell pf {{#if c.filled}}filled{{/if}}" data-action="togglePf" data-idx="{{c.i}}"></span>
+          {{/each}}
+          <input type="number" name="system.pf.max" value="{{system.pf.max}}" min="1" max="20" class="dh-track-max"/>
+        </div>
+      </div>
+      <div class="dh-track">
+        <h4>Stress <span class="dh-track-num">{{system.stress.value}}/{{system.stress.max}}</span></h4>
+        <div class="dh-cells-row">
+          {{#each cellsStress as |c|}}
+            <span class="dh-cell stress {{#if c.filled}}filled{{/if}}" data-action="toggleStress" data-idx="{{c.i}}"></span>
+          {{/each}}
+          <input type="number" name="system.stress.max" value="{{system.stress.max}}" min="1" max="20" class="dh-track-max"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dh-block">
+    <h3 class="dh-block-title">Soglie di Danno</h3>
+    <div class="dh-difesa-grid">
+      <label>Soglia Maggiore <input type="number" name="system.soglie.maggiore" value="{{system.soglie.maggiore}}"/></label>
+      <label>Soglia Grave <input type="number" name="system.soglie.grave" value="{{system.soglie.grave}}"/></label>
+      <div class="dh-readout"><span>Difficoltà</span><strong>{{system.difficolta}}</strong></div>
+    </div>
+  </div>
+
+  <div class="dh-block">
+    <h3 class="dh-block-title">Motivazioni / Tattiche</h3>
+    <textarea name="system.motivazioni" rows="3">{{system.motivazioni}}</textarea>
+  </div>
+
+  <div class="dh-block">
+    <h3 class="dh-block-title">Esperienze</h3>
+    <input type="text" name="system.esperienze" value="{{system.esperienze}}" placeholder="es. Cacciatore +3" style="width:100%;"/>
+  </div>
+</section>
+
+{{!-- TAB: ATTACCO --}}
+<section class="dh-tab-content {{#if (eq currentTab 'attack')}}active{{/if}}" data-tab-content="attack">
+  <div class="dh-block">
+    <h3 class="dh-block-title">Attacco</h3>
+    <div class="dh-adv-attack-grid">
+      <label>Nome <input type="text" name="system.attacco.nome" value="{{system.attacco.nome}}"/></label>
+      <label>Bonus <input type="number" name="system.attacco.bonus" value="{{system.attacco.bonus}}"/></label>
+      <label>Portata
+        <select name="system.attacco.portata">
+          {{#each config.portate as |p|}}<option value="{{p}}" {{#if (eq p ../system.attacco.portata)}}selected{{/if}}>{{p}}</option>{{/each}}
+        </select>
+      </label>
+      <label>Danno <input type="text" name="system.attacco.danno" value="{{system.attacco.danno}}" placeholder="2d6+3 fis"/></label>
+      <div class="dh-row">
+        <button type="button" class="dh-btn dh-btn-primary" data-action="tiraAttacco"><i class="fa-solid fa-sword"></i> Tira Attacco (1d20)</button>
+        <button type="button" class="dh-btn" data-action="tiraDanno"><i class="fa-solid fa-burst"></i> Tira Danno</button>
+        <button type="button" class="dh-btn dh-btn-fear" data-action="spendiPaura"><i class="fa-solid fa-skull"></i> Spendi 1 Paura</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{!-- TAB: CARATTERISTICHE --}}
+<section class="dh-tab-content {{#if (eq currentTab 'features')}}active{{/if}}" data-tab-content="features">
+  <div class="dh-block">
+    <h3 class="dh-block-title">
+      Caratteristiche
+      <button type="button" class="dh-btn-mini" data-action="itemCreate">+ Caratteristica</button>
+    </h3>
+    <ul class="dh-list">
+      {{#each caratteristiche as |c|}}
+        <li class="dh-list-item dh-list-item-vert" data-item-id="{{c.id}}">
+          <div class="dh-row">
+            <span class="dh-feat-tipo">{{c.system.tipoPrivilegio}}</span>
+            <strong>{{c.name}}</strong>
+            <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+          {{#if c.system.description}}<div class="dh-desc">{{c.system.description}}</div>{{/if}}
+        </li>
+      {{else}}<li class="dh-empty">Nessuna caratteristica.</li>{{/each}}
+    </ul>
+  </div>
+</section>
+
+{{!-- TAB: DESCRIZIONE --}}
+<section class="dh-tab-content {{#if (eq currentTab 'desc')}}active{{/if}}" data-tab-content="desc">
+  <div class="dh-block">
+    <h3 class="dh-block-title">Descrizione</h3>
+    <textarea name="system.description" rows="15" style="width:100%;">{{system.description}}</textarea>
+  </div>
+</section>
+</div>

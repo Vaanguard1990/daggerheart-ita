@@ -1,0 +1,383 @@
+/* === Daggerheart ITA — tema chiaro pergamena === */
+:root {
+  --dh-bg:       #f4ead0;
+  --dh-bg-2:     #faf2dc;
+  --dh-bg-3:     #ebdcb8;
+  --dh-card:     #fffaee;
+  --dh-fg:       #2e1f12;
+  --dh-fg-dim:   #6b5a40;
+  --dh-border:   #c9b380;
+  --dh-gold:     #8b6914;
+  --dh-gold-2:   #b8902a;
+  --dh-accent:   #7a3a3a;
+  --dh-hope:     #e6a83e;
+  --dh-hope-bg:  #fdf3d0;
+  --dh-fear:     #5a2828;
+  --dh-fear-bg:  #f0d4d4;
+  --dh-crit:     #b8860b;
+  --dh-ok:       #3d7d3d;
+  --dh-ko:       #9a3030;
+  --dh-pf:       #b94747;
+  --dh-stress:   #8a6634;
+  --dh-armor:    #4a6280;
+}
+
+.application.daggerheart-ita .window-content {
+  background: linear-gradient(180deg, rgba(255,255,255,.4), rgba(0,0,0,0)), var(--dh-bg);
+  color: var(--dh-fg);
+  padding: .65rem;
+  font-family: "Signika", "Helvetica Neue", sans-serif;
+}
+
+.daggerheart-ita input[type=text],
+.daggerheart-ita input[type=number],
+.daggerheart-ita select,
+.daggerheart-ita textarea {
+  background: var(--dh-card); color: var(--dh-fg);
+  border: 1px solid var(--dh-border); border-radius: 3px;
+  padding: .2rem .35rem; font-family: inherit; font-size: 12px;
+}
+.daggerheart-ita input:focus, .daggerheart-ita select:focus, .daggerheart-ita textarea:focus {
+  border-color: var(--dh-gold); outline: none; box-shadow: 0 0 0 2px rgba(184,144,42,.25);
+}
+.daggerheart-ita label {
+  display: flex; flex-direction: column; gap: .15rem;
+  font-size: 11px; color: var(--dh-fg-dim);
+  text-transform: uppercase; letter-spacing: .3px; font-weight: 600;
+}
+.daggerheart-ita textarea { font-family: inherit; min-height: 2.5rem; resize: vertical; }
+
+.daggerheart-ita .dh-btn,
+.daggerheart-ita .dh-btn-mini,
+.daggerheart-ita .dh-btn-icon {
+  background: var(--dh-card); color: var(--dh-fg);
+  border: 1px solid var(--dh-border); border-radius: 3px;
+  padding: .3rem .65rem; cursor: pointer;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  transition: all .15s; line-height: 1.2;
+}
+.daggerheart-ita .dh-btn:hover, .daggerheart-ita .dh-btn-mini:hover, .daggerheart-ita .dh-btn-icon:hover {
+  background: var(--dh-gold-2); border-color: var(--dh-gold); color: #fff;
+}
+.daggerheart-ita .dh-btn-primary { background: var(--dh-gold); border-color: var(--dh-gold); color: #fff; }
+.daggerheart-ita .dh-btn-fear { background: var(--dh-fear); color: #fff; border-color: #3a1818; }
+.daggerheart-ita .dh-btn-warn { background: var(--dh-accent); color: #fff; }
+.daggerheart-ita .dh-btn-mini { padding: .15rem .45rem; font-size: 11px; }
+.daggerheart-ita .dh-btn-icon { padding: .15rem .35rem; }
+
+.daggerheart-ita .dh-block {
+  background: var(--dh-bg-2); border: 1px solid var(--dh-border);
+  border-radius: 4px; padding: .5rem .65rem; margin-bottom: .55rem;
+  box-shadow: 0 1px 0 rgba(139, 105, 20, .08);
+}
+.daggerheart-ita .dh-block-title {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .35rem;
+  font-size: 13px; font-weight: 700; color: var(--dh-gold);
+  margin: 0 0 .45rem 0; padding-bottom: .3rem;
+  border-bottom: 1px solid var(--dh-border);
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.daggerheart-ita .dh-info { font-size: 11px; color: var(--dh-fg-dim); text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+/* Header */
+.dh-character-header, .dh-adv-header, .dh-env-header {
+  display: flex; gap: .65rem;
+  background: linear-gradient(135deg, var(--dh-bg-3), var(--dh-bg-2));
+  border: 1px solid var(--dh-border); border-radius: 4px;
+  padding: .5rem .65rem; margin-bottom: .55rem;
+}
+.dh-portrait img, .dh-adv-portrait img {
+  width: 72px; height: 72px; object-fit: cover;
+  border-radius: 4px; border: 2px solid var(--dh-gold); background: var(--dh-card);
+}
+.dh-id { flex: 1; display: flex; flex-direction: column; gap: .35rem; }
+.dh-name, .dh-adv-nome, .dh-env-nome {
+  font-size: 18px; font-weight: 800; color: var(--dh-gold);
+  background: transparent; border: none;
+  border-bottom: 1px solid var(--dh-border); padding: .15rem .25rem;
+}
+.dh-name:focus, .dh-adv-nome:focus, .dh-env-nome:focus {
+  background: var(--dh-card); border-color: var(--dh-gold);
+}
+.dh-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; }
+
+/* Tabs (CSS-only show/hide) */
+.dh-tabs {
+  display: flex; gap: .2rem;
+  border-bottom: 2px solid var(--dh-gold);
+  margin-bottom: .55rem; padding: 0 .25rem;
+}
+.dh-tab {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .4rem .85rem; cursor: pointer;
+  color: var(--dh-fg-dim); background: transparent;
+  border: 1px solid transparent; border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .5px;
+  transition: all .15s;
+}
+.dh-tab:hover { background: var(--dh-bg-2); color: var(--dh-fg); }
+.dh-tab.active { background: var(--dh-bg-2); border-color: var(--dh-gold); color: var(--dh-gold); }
+.dh-tab-content { display: none; }
+.dh-tab-content.active { display: block; animation: dhFade .15s ease-out; }
+@keyframes dhFade { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+
+/* Tratti */
+.dh-tratti-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+.dh-tratto { display: flex; flex-direction: column; gap: .2rem; }
+.dh-tratto-tira {
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  padding: .45rem; background: var(--dh-card);
+  border: 1px solid var(--dh-border); border-radius: 4px;
+  cursor: pointer; color: var(--dh-fg); transition: all .15s;
+}
+.dh-tratto-tira:hover {
+  background: var(--dh-gold); border-color: var(--dh-gold); color: #fff;
+  transform: translateY(-1px); box-shadow: 0 2px 4px rgba(139, 105, 20, .25);
+}
+.dh-tratto-nome { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; color: var(--dh-fg-dim); font-weight: 700; }
+.dh-tratto-tira:hover .dh-tratto-nome { color: rgba(255,255,255,.85); }
+.dh-tratto-val { font-size: 22px; font-weight: 800; line-height: 1; }
+.dh-tratto-input { text-align: center; font-weight: 700; }
+
+/* Tracks */
+.dh-tracks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+.dh-track { background: var(--dh-card); border: 1px solid var(--dh-border); border-radius: 4px; padding: .5rem; }
+.dh-track h4 {
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 0 0 .4rem 0; font-size: 11px; color: var(--dh-fg-dim);
+  text-transform: uppercase; letter-spacing: .5px; font-weight: 700;
+}
+.dh-track h4 .dh-track-num { color: var(--dh-fg); font-size: 13px; font-weight: 800; }
+.dh-cells-row { display: flex; flex-wrap: wrap; gap: .2rem; align-items: center; }
+.dh-cell {
+  width: 18px; height: 18px; border-radius: 3px;
+  border: 1.5px solid var(--dh-border); background: var(--dh-bg);
+  cursor: pointer; transition: all .12s;
+}
+.dh-cell:hover { transform: scale(1.1); }
+.dh-cell.pf.filled     { background: var(--dh-pf); border-color: #7a2828; }
+.dh-cell.stress.filled { background: var(--dh-stress); border-color: #5a3a1c; }
+.dh-cell.armor.filled  { background: var(--dh-armor); border-color: #2a3e60; }
+.dh-cell.hope.filled   { background: var(--dh-hope); border-color: #c08218; }
+.dh-track-max { width: 50px; margin-left: auto; }
+.dh-track-empty { font-style: italic; color: var(--dh-fg-dim); font-size: 11px; }
+
+/* Difesa */
+.dh-difesa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; align-items: end; }
+.dh-readout {
+  display: flex; flex-direction: column; align-items: center;
+  padding: .4rem; background: var(--dh-bg-3); border-radius: 4px;
+  border: 1px solid var(--dh-gold);
+}
+.dh-readout span { font-size: 10px; color: var(--dh-fg-dim); text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
+.dh-readout strong { font-size: 24px; color: var(--dh-gold); font-weight: 800; line-height: 1; }
+
+/* Liste */
+.dh-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .25rem; }
+.dh-list-item {
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  padding: .35rem .5rem; background: var(--dh-card); border-radius: 3px;
+  border: 1px solid var(--dh-border);
+}
+.dh-list-item-vert { flex-direction: column; align-items: stretch; gap: .35rem; }
+.dh-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.dh-empty { padding: .5rem; color: var(--dh-fg-dim); font-style: italic; text-align: center; font-size: 11px; }
+.dh-arma-cat { font-size: 9px; padding: 2px 6px; background: var(--dh-gold); color: #fff; border-radius: 3px; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
+.dh-arma-info { color: var(--dh-fg-dim); font-size: 11px; flex: 1; }
+.dh-arma-nome { font-weight: 700; }
+.dh-exp-bonus { font-weight: 800; color: var(--dh-gold); margin-left: auto; }
+.dh-oro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+.dh-dominio-badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; background: var(--dh-gold); color: #fff; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
+
+/* Item sheet */
+.dh-item-sheet { display: flex; flex-direction: column; gap: .5rem; }
+.dh-item-header {
+  display: flex; gap: .5rem; align-items: center;
+  padding: .35rem .5rem;
+  background: linear-gradient(135deg, var(--dh-bg-3), var(--dh-bg-2));
+  border: 1px solid var(--dh-border); border-radius: 4px;
+}
+.dh-item-img { width: 48px; height: 48px; border-radius: 4px; border: 2px solid var(--dh-gold); }
+.dh-item-nome { flex: 1; font-size: 16px; font-weight: 700; color: var(--dh-gold); background: transparent; border: none; }
+.dh-item-type { font-size: 10px; color: #fff; background: var(--dh-gold); padding: 3px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
+.dh-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .35rem; }
+.dh-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .35rem; }
+.dh-grid-2 .dh-full, .dh-grid-3 .dh-full { grid-column: 1 / -1; }
+.dh-item-sheet fieldset { border: 1px solid var(--dh-border); border-radius: 4px; padding: .4rem .55rem; margin: 0; background: var(--dh-card); }
+.dh-item-sheet legend { color: var(--dh-gold); font-size: 11px; font-weight: 700; padding: 0 .35rem; text-transform: uppercase; letter-spacing: .5px; }
+.dh-item-desc { background: var(--dh-card); padding: .5rem; border-radius: 4px; border: 1px solid var(--dh-border); }
+.dh-item-desc h4 { color: var(--dh-gold); margin: 0 0 .25rem 0; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+.dh-item-desc textarea { width: 100%; min-height: 6rem; }
+
+/* Adversary */
+.dh-adv-header { border-left: 4px solid var(--dh-gold); }
+.dh-adv-meta { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: .35rem; }
+.dh-feat-tipo { font-size: 9px; padding: 2px 6px; background: var(--dh-accent); color: #fff; border-radius: 3px; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
+.dh-desc { font-size: 12px; color: var(--dh-fg); line-height: 1.5; padding: .35rem 0; }
+.dh-adv-attack-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: .35rem; align-items: end; }
+.dh-adv-attack-grid .dh-row { grid-column: 1 / -1; margin-top: .35rem; }
+
+/* Environment */
+.dh-env-header { border-left: 4px solid var(--dh-gold); flex-direction: column; gap: .35rem; }
+
+/* Sidebar toolbar */
+.dh-toolbar {
+  display: flex; gap: .35rem; padding: .4rem;
+  background: var(--dh-bg-3); border: 1px solid var(--dh-border);
+  border-radius: 4px; margin: .35rem .5rem;
+}
+.dh-toolbar .dh-btn { flex: 1; }
+
+/* Hope/Fear tracker */
+.dh-tracker { padding: .5rem; display: flex; flex-direction: column; gap: .55rem; }
+.dh-tracker section { padding: .55rem; background: var(--dh-card); border-radius: 4px; border: 1px solid var(--dh-border); }
+.dh-tracker-fear { border-left: 4px solid var(--dh-fear) !important; }
+.dh-tracker-hope { border-left: 4px solid var(--dh-hope) !important; }
+.dh-tracker h3 { display: flex; justify-content: space-between; align-items: center; margin: 0 0 .35rem 0; font-size: 13px; color: var(--dh-gold); text-transform: uppercase; letter-spacing: .5px; }
+.dh-tracker-num { color: var(--dh-fg); font-weight: 800; font-size: 14px; }
+.dh-tracker-cells { display: flex; flex-wrap: wrap; gap: .15rem; margin: .35rem 0; }
+.dh-tracker-cell { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid var(--dh-border); background: var(--dh-bg); }
+.dh-cell-fear.filled { background: var(--dh-fear); border-color: #3a1818; }
+.dh-tracker-buttons { display: flex; gap: .25rem; }
+.dh-tracker-buttons button { flex: 1; padding: .3rem; background: var(--dh-card); border: 1px solid var(--dh-border); color: var(--dh-fg); border-radius: 3px; cursor: pointer; font-weight: 700; }
+.dh-tracker-buttons button:hover { background: var(--dh-gold); color: #fff; border-color: var(--dh-gold); }
+.dh-tracker-footer { text-align: center; margin-top: .25rem; }
+
+/* Chat: Duality card */
+.dh-duality-card { border: 2px solid var(--dh-border); border-radius: 6px; padding: .5rem; background: linear-gradient(180deg, var(--dh-bg-2), var(--dh-bg)); color: var(--dh-fg); }
+.dh-duality-card.dh-crit { border-color: var(--dh-crit); box-shadow: 0 0 12px rgba(184,134,11,.4); }
+.dh-duality-card.dh-hope { border-color: var(--dh-hope); }
+.dh-duality-card.dh-fear { border-color: var(--dh-fear); }
+.dh-duality-header { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1px solid var(--dh-border); margin-bottom: .35rem; }
+.dh-duality-label { color: var(--dh-gold); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; font-size: 12px; }
+.dh-duality-actor { color: var(--dh-fg-dim); font-style: italic; font-size: 11px; }
+.dh-duality-dice { display: flex; align-items: center; justify-content: center; gap: .65rem; padding: .4rem 0; }
+.dh-die { display: flex; flex-direction: column; align-items: center; padding: .35rem .65rem; border-radius: 6px; min-width: 50px; gap: .15rem; }
+.dh-die-hope { background: var(--dh-hope-bg); border: 2px solid var(--dh-hope); color: #6b4a14; }
+.dh-die-fear { background: var(--dh-fear-bg); border: 2px solid var(--dh-fear); color: var(--dh-fear); }
+.dh-die-val { font-size: 22px; font-weight: 800; line-height: 1; }
+.dh-duality-vs { font-size: 18px; color: var(--dh-fg-dim); }
+.dh-duality-total { text-align: center; padding: .35rem; font-size: 13px; }
+.dh-duality-total strong { color: var(--dh-gold); font-size: 18px; }
+.dh-duality-flag { text-align: center; padding: .35rem 0; }
+.dh-tag { display: inline-block; padding: 4px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.dh-tag-crit { background: var(--dh-crit); color: #fff; }
+.dh-tag-hope { background: var(--dh-hope); color: #5a3a08; }
+.dh-tag-fear { background: var(--dh-fear); color: #fff; }
+.dh-ok { color: var(--dh-ok); font-weight: 800; }
+.dh-ko { color: var(--dh-ko); font-weight: 800; }
+.dh-duality-tooltip { margin-top: .35rem; padding: .25rem .35rem; background: rgba(0,0,0,.05); border-radius: 3px; }
+.dh-duality-tooltip summary { cursor: pointer; font-size: 11px; color: var(--dh-fg-dim); }
+.dh-danno-card, .dh-att-card { padding: .5rem; background: var(--dh-bg-2); color: var(--dh-fg); border: 1px solid var(--dh-border); border-radius: 4px; }
+.dh-danno-card-header, .dh-att-card-h { color: var(--dh-gold); font-weight: 700; padding-bottom: .25rem; border-bottom: 1px solid var(--dh-border); margin-bottom: .35rem; text-transform: uppercase; letter-spacing: .5px; font-size: 12px; }
+.dh-fear-spent { padding: .4rem; background: var(--dh-fear-bg); color: var(--dh-fear); border: 1px solid var(--dh-fear); border-radius: 3px; font-style: italic; }
+.dh-riposo { display: flex; gap: .5rem; }
+.dh-riposo .dh-btn { flex: 1; }
+
+/* === FIX VISUALIZZAZIONE v0.1.3 === */
+
+/* Force font sans-serif su TUTTI gli heading (Foundry forza Modesto Condensed sui h*) */
+.daggerheart-ita h1,
+.daggerheart-ita h2,
+.daggerheart-ita h3,
+.daggerheart-ita h4,
+.daggerheart-ita h5,
+.daggerheart-ita h6,
+.daggerheart-ita .dh-block-title,
+.daggerheart-ita .dh-track h4 {
+  font-family: "Signika", "Helvetica Neue", "Segoe UI", Arial, sans-serif !important;
+  font-variant: normal !important;
+  font-feature-settings: normal !important;
+}
+
+/* === Header meta migliorato === */
+.dh-character-header { gap: .85rem; padding: .65rem; }
+.dh-portrait img { width: 88px; height: 88px; }
+.dh-meta { display: none; } /* vecchia grid 3col disattivata */
+.dh-meta-row {
+  display: flex; gap: .5rem; align-items: end;
+  margin-top: .25rem;
+}
+.dh-meta-grow { flex: 1 1 0; min-width: 0; }
+.dh-meta-num  { flex: 0 0 70px; }
+.dh-meta-row label { font-size: 10px; }
+.dh-meta-row input { width: 100%; }
+
+/* === Tratti puliti: bottone grande + input compatto sotto === */
+.dh-tratti-grid { gap: .65rem; }
+.dh-tratto-card {
+  display: flex; flex-direction: column;
+  background: var(--dh-card);
+  border: 1px solid var(--dh-border);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: all .15s;
+}
+.dh-tratto-card:hover {
+  border-color: var(--dh-gold);
+  box-shadow: 0 2px 6px rgba(139, 105, 20, .15);
+}
+/* override del bottone interno: niente bordo, prende l'intero spazio superiore */
+.dh-tratto-card .dh-tratto-tira {
+  border: none !important;
+  border-bottom: 1px solid var(--dh-border) !important;
+  border-radius: 0;
+  background: transparent;
+  padding: .55rem .35rem .45rem;
+  margin: 0;
+  width: 100%;
+}
+.dh-tratto-card .dh-tratto-tira:hover {
+  background: var(--dh-gold);
+  color: #fff;
+  transform: none;
+  box-shadow: none;
+}
+.dh-tratto-card .dh-tratto-tira:hover .dh-tratto-nome { color: rgba(255,255,255,.9); }
+.dh-tratto-card .dh-tratto-nome { font-size: 10px; }
+.dh-tratto-card .dh-tratto-val { font-size: 26px; }
+.dh-tratto-edit {
+  display: flex; align-items: center; justify-content: center;
+  padding: .2rem .35rem;
+  background: var(--dh-bg-3);
+}
+.dh-tratto-edit::before {
+  content: "Mod.";
+  font-size: 9px; color: var(--dh-fg-dim); margin-right: .35rem;
+  text-transform: uppercase; letter-spacing: .5px; font-weight: 700;
+}
+.dh-tratto-card .dh-tratto-input {
+  width: 50px; text-align: center;
+  font-size: 12px; padding: .15rem .25rem;
+  background: var(--dh-card);
+}
+
+/* === Difesa 3 colonne simmetrica === */
+.dh-difesa-grid { grid-template-columns: repeat(3, 1fr); gap: .55rem; }
+.dh-readout-alt { background: var(--dh-card); border: 1px dashed var(--dh-border); }
+.dh-readout-alt strong { font-size: 18px; }
+
+/* === Tracce: h4 più leggibile === */
+.dh-track h4 {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: .5px;
+  color: var(--dh-fg-dim) !important;
+}
+.dh-track h4 .dh-track-num {
+  font-size: 14px;
+  color: var(--dh-gold) !important;
+  font-weight: 800;
+}
+
+/* === Block-title: leggibile e ben spaziato === */
+.dh-block-title {
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: .6px;
+}
+
+/* === Migliora il dh-name === */
+.dh-name { font-size: 20px; padding: .25rem .35rem; }

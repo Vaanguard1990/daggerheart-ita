@@ -1,0 +1,63 @@
+{
+  "id": "daggerheart-ita",
+  "title": "Daggerheart (ITA)",
+  "description": "Sistema italiano per Daggerheart di Darrington Press. Include schede PG, avversari, ambienti, tiri Duality automatici (Speranza/Paura), e dati SRD localizzati (classi, sottoclassi, discendenze, comunità, dominî, armi, armature, avversari, ambienti). Non ufficiale. Tutti i diritti del materiale di gioco appartengono a Darrington Press.",
+  "version": "0.1.4",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14",
+    "maximum": "14"
+  },
+  "authors": [
+    {
+      "name": "Giuseppe Santostasi",
+      "url": "https://github.com/Vaanguard1990"
+    }
+  ],
+  "esmodules": ["module/daggerheart.mjs"],
+  "styles": ["styles/daggerheart.css"],
+  "languages": [
+    {
+      "lang": "it",
+      "name": "Italiano",
+      "path": "lang/it.json"
+    }
+  ],
+  "packs": [],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": ["details.bio", "details.notes"]
+      },
+      "adversary": {
+        "htmlFields": ["description"]
+      },
+      "environment": {
+        "htmlFields": ["description"]
+      }
+    },
+    "Item": {
+      "ancestry": { "htmlFields": ["description"] },
+      "community": { "htmlFields": ["description"] },
+      "class": { "htmlFields": ["description"] },
+      "subclass": { "htmlFields": ["description"] },
+      "domainCard": { "htmlFields": ["description"] },
+      "weapon": { "htmlFields": ["description"] },
+      "armor": { "htmlFields": ["description"] },
+      "feature": { "htmlFields": ["description"] },
+      "experience": { "htmlFields": [] },
+      "consumable": { "htmlFields": ["description"] },
+      "inventory": { "htmlFields": ["description"] },
+      "beastForm": { "htmlFields": ["description"] }
+    }
+  },
+  "grid": {
+    "distance": 1,
+    "units": "portate"
+  },
+  "primaryTokenAttribute": "pf",
+  "secondaryTokenAttribute": "stress",
+  "url": "https://github.com/Vaanguard1990/daggerheart-ita",
+  "manifest": "https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.json",
+  "download": "https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.zip"
+}

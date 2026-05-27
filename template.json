@@ -1,0 +1,174 @@
+{
+  "Actor": {
+    "types": ["character", "adversary", "environment"],
+    "templates": {
+      "base": {
+        "description": ""
+      },
+      "tracks": {
+        "pf":     { "value": 0, "max": 6 },
+        "stress": { "value": 0, "max": 6 }
+      }
+    },
+    "character": {
+      "templates": ["base", "tracks"],
+      "tratti": {
+        "agilita":    { "valore": 0 },
+        "forza":      { "valore": 0 },
+        "astuzia":    { "valore": 0 },
+        "istinto":    { "valore": 0 },
+        "presenza":   { "valore": 0 },
+        "conoscenza": { "valore": 0 }
+      },
+      "livello":   { "value": 1 },
+      "competenza": { "value": 1 },
+      "evasione":   { "value": 10, "bonus": 0 },
+      "soglie":     { "maggiore": 6, "grave": 12 },
+      "armatura":   { "value": 0, "max": 0 },
+      "speranza":   { "value": 2, "max": 6 },
+      "classe":     "",
+      "sottoclasse": "",
+      "retaggio":   "",
+      "comunita":   "",
+      "carteDotazione": { "max": 5 },
+      "oro": {
+        "manciate": 0,
+        "sacchi":   0,
+        "scrigni":  0
+      },
+      "details": {
+        "bio":   "",
+        "notes": "",
+        "pronomi": "",
+        "aspetto": ""
+      }
+    },
+    "adversary": {
+      "templates": ["base", "tracks"],
+      "tipo":        "Avversario Base",
+      "rango":       1,
+      "difficolta":  10,
+      "soglie":      { "maggiore": 0, "grave": 0 },
+      "motivazioni": "",
+      "esperienze":  "",
+      "attacco": {
+        "nome":    "",
+        "bonus":   0,
+        "portata": "Mischia",
+        "danno":   ""
+      }
+    },
+    "environment": {
+      "templates": ["base"],
+      "tipo":       "Esplorazione",
+      "rango":      1,
+      "difficolta": 10,
+      "impeti":     "",
+      "potenzialiAvversari": ""
+    }
+  },
+  "Item": {
+    "types": [
+      "ancestry","community","class","subclass","domainCard",
+      "weapon","armor","feature","experience","consumable","inventory","beastForm"
+    ],
+    "templates": {
+      "base":        { "description": "", "source": "SRD ITA" },
+      "physical":    { "quantita": 1, "costo": { "tipo": "manciata", "valore": 0 }, "equipaggiato": false }
+    },
+    "ancestry": {
+      "templates": ["base"],
+      "tratti": [],
+      "tratto1": { "nome": "", "descrizione": "" },
+      "tratto2": { "nome": "", "descrizione": "" }
+    },
+    "community": {
+      "templates": ["base"],
+      "privilegio": { "nome": "", "descrizione": "" }
+    },
+    "class": {
+      "templates": ["base"],
+      "domini": [],
+      "evasioneBase": 10,
+      "pfBase":       6,
+      "stressBase":   6,
+      "speranzaBase": 2,
+      "esperienzaIniziale": "",
+      "equipaggiamentoIniziale": "",
+      "privilegioClasse":    { "nome": "", "descrizione": "" },
+      "movimentoSpe":        { "nome": "", "descrizione": "" }
+    },
+    "subclass": {
+      "templates": ["base"],
+      "classe":     "",
+      "spellcast":  "",
+      "fondamento": { "nome": "", "descrizione": "" },
+      "specializzazione": { "nome": "", "descrizione": "" },
+      "maestria":   { "nome": "", "descrizione": "" }
+    },
+    "domainCard": {
+      "templates": ["base"],
+      "dominio":   "",
+      "livello":   1,
+      "tipo":      "Privilegio",
+      "ricarica":  ""
+    },
+    "weapon": {
+      "templates": ["base", "physical"],
+      "categoria":      "Primaria",
+      "tratto":         "Agilità",
+      "portata":        "Mischia",
+      "danno": {
+        "numDadi":   1,
+        "dado":      "d6",
+        "bonus":     0,
+        "tipoDanno": "fisico"
+      },
+      "speciale":     "",
+      "tier":         1,
+      "magica":       false,
+      "dueMani":      false
+    },
+    "armor": {
+      "templates": ["base", "physical"],
+      "sogliaMaggiore":  0,
+      "sogliaGrave":     0,
+      "caselleArmatura": 0,
+      "speciale":        "",
+      "tier":             1,
+      "magica":           false
+    },
+    "feature": {
+      "templates": ["base"],
+      "tipoPrivilegio": "Generico",
+      "fonte":          "",
+      "ricarica":       ""
+    },
+    "experience": {
+      "templates": ["base"],
+      "bonus": 2
+    },
+    "consumable": {
+      "templates": ["base", "physical"],
+      "usi": { "value": 1, "max": 1 }
+    },
+    "inventory": {
+      "templates": ["base", "physical"]
+    },
+    "beastForm": {
+      "templates": ["base"],
+      "tier":             1,
+      "evasione":         10,
+      "tratti": {
+        "agilita":    0,
+        "forza":      0,
+        "astuzia":    0,
+        "istinto":    0,
+        "presenza":   0,
+        "conoscenza": 0
+      },
+      "attacco": { "nome": "", "portata": "Mischia", "danno": "" },
+      "caratteristiche": ""
+    }
+  }
+}

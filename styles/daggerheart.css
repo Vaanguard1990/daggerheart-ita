@@ -696,3 +696,17 @@
   background-color: var(--dh-card);
   color: var(--dh-fg);
 }
+
+/* === v0.3.0: selettori SRD in-scheda === */
+.dh-add-row {
+  display: flex; gap: .4rem; align-items: center;
+  margin-bottom: .5rem;
+}
+.dh-add-row select {
+  flex: 1; min-width: 0;
+  font-size: 11px;
+}
+.dh-add-row .dh-btn-mini { flex: 0 0 auto; white-space: nowrap; }
+.dh-meta-row select {
+  width: 100%; font-size: 12px;
+}

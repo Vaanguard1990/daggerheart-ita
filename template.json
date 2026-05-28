@@ -32,6 +32,7 @@
       "comunita":   "",
       "carteDotazione": { "max": 5 },
       "bonusAttivi": {},
+      "dominiClasse": [],
       "formaAttiva": null,
       "compagno": {
         "nome": "", "tipo": "", "evasione": 10,

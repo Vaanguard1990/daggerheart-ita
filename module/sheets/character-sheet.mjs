@@ -1,6 +1,8 @@
 import { DH } from "../config.mjs";
 import { DualityRoll } from "../duality-roll.mjs";
 import { apriAvanzamento } from "../avanzamento.mjs";
+import * as Applica from "../applica-srd.mjs";
+import * as SRD from "../srd-data.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -34,7 +36,10 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       itemEquip:       DaggerheartCharacterSheet._itemEquip,
       shortRest:       DaggerheartCharacterSheet._shortRest,
       longRest:        DaggerheartCharacterSheet._longRest,
-      avanzamento:     DaggerheartCharacterSheet._avanzamento
+      avanzamento:     DaggerheartCharacterSheet._avanzamento,
+      aggiungiCarta:   DaggerheartCharacterSheet._aggiungiCarta,
+      aggiungiArma:    DaggerheartCharacterSheet._aggiungiArma,
+      aggiungiArmatura: DaggerheartCharacterSheet._aggiungiArmatura
     }
   };
 
@@ -81,6 +86,13 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       formeBestiali: await this._caricaForme(),
       isDruido: /druido/i.test(this.actor.system.classe ?? ""),
       isRanger: /ranger/i.test(this.actor.system.classe ?? ""),
+      dbClassi: await SRD.getClassi(),
+      dbSottoclassi: await SRD.getSottoclassiPerClasse(this.actor.system.classe ?? ""),
+      dbDiscendenze: await SRD.getDiscendenze(),
+      dbComunita: await SRD.getComunita(),
+      dbCarte: await SRD.getCarteDisponibili(this.actor.system.dominiClasse ?? [], this.actor.system.livello?.value ?? 10),
+      dbArmi: await SRD.getArmi(),
+      dbArmature: await SRD.getArmature(),
       privilegi:   items.filter(i => i.type === "feature"),
       esperienze:  items.filter(i => i.type === "experience"),
       dominii:     items.filter(i => i.type === "domainCard"),

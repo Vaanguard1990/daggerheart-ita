@@ -8,12 +8,32 @@
   <div class="dh-id">
     <input type="text" name="name" value="{{actor.name}}" placeholder="Nome del personaggio" class="dh-name" {{#unless editMode}}readonly{{/unless}}/>
     <div class="dh-meta-row">
-      <label class="dh-meta-grow">Classe <input type="text" name="system.classe" value="{{system.classe}}" {{#unless editMode}}readonly{{/unless}}/></label>
-      <label class="dh-meta-grow">Sottoclasse <input type="text" name="system.sottoclasse" value="{{system.sottoclasse}}" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label class="dh-meta-grow">Classe
+        <select name="_selClasse">
+          <option value="">— scegli —</option>
+          {{#each dbClassi as |c|}}<option value="{{c}}" {{#if (eq c ../system.classe)}}selected{{/if}}>{{c}}</option>{{/each}}
+        </select>
+      </label>
+      <label class="dh-meta-grow">Sottoclasse
+        <select name="_selSottoclasse">
+          <option value="">— scegli —</option>
+          {{#each dbSottoclassi as |c|}}<option value="{{c}}" {{#if (eq c ../system.sottoclasse)}}selected{{/if}}>{{c}}</option>{{/each}}
+        </select>
+      </label>
     </div>
     <div class="dh-meta-row">
-      <label class="dh-meta-grow">Discendenza <input type="text" name="system.retaggio" value="{{system.retaggio}}" {{#unless editMode}}readonly{{/unless}}/></label>
-      <label class="dh-meta-grow">Comunità <input type="text" name="system.comunita" value="{{system.comunita}}" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label class="dh-meta-grow">Discendenza
+        <select name="_selDiscendenza">
+          <option value="">— scegli —</option>
+          {{#each dbDiscendenze as |c|}}<option value="{{c}}" {{#if (eq c ../system.retaggio)}}selected{{/if}}>{{c}}</option>{{/each}}
+        </select>
+      </label>
+      <label class="dh-meta-grow">Comunità
+        <select name="_selComunita">
+          <option value="">— scegli —</option>
+          {{#each dbComunita as |c|}}<option value="{{c}}" {{#if (eq c ../system.comunita)}}selected{{/if}}>{{c}}</option>{{/each}}
+        </select>
+      </label>
       <label class="dh-meta-num">Liv. <input type="number" name="system.livello.value" value="{{system.livello.value}}" min="1" max="10" {{#unless editMode}}readonly{{/unless}}/></label>
       <label class="dh-meta-num">Tier <input type="number" value="{{system.tier}}" disabled title="Tier equipaggiamento"/></label>
       <label class="dh-meta-num">Rango <input type="number" value="{{system.rango}}" disabled title="Rango avanzamenti"/></label>
@@ -201,10 +221,14 @@
 <section class="dh-tab-content {{#if (eq currentTab 'equip')}}active{{/if}}" data-tab-content="equip">
 
   <div class="dh-block">
-    <h3 class="dh-block-title">
-      Armi
-      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="weapon">+ Arma</button>
-    </h3>
+    <h3 class="dh-block-title">Armi</h3>
+    <div class="dh-add-row">
+      <select name="_selArma">
+        <option value="">— scegli un'arma —</option>
+        {{#each dbArmi as |a|}}<option value="{{a.nome}}">T{{a.tier}} · {{a.nome}} ({{a.tratto}} {{a.dado}}+{{a.bonus}} {{a.portata}})</option>{{/each}}
+      </select>
+      <button type="button" class="dh-btn-mini" data-action="aggiungiArma">+ Aggiungi</button>
+    </div>
     <ul class="dh-list">
       {{#each armi as |w|}}
         <li class="dh-list-item" data-item-id="{{w.id}}">
@@ -221,10 +245,14 @@
   </div>
 
   <div class="dh-block">
-    <h3 class="dh-block-title">
-      Armature
-      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="armor">+ Armatura</button>
-    </h3>
+    <h3 class="dh-block-title">Armature</h3>
+    <div class="dh-add-row">
+      <select name="_selArmatura">
+        <option value="">— scegli un'armatura —</option>
+        {{#each dbArmature as |a|}}<option value="{{a.nome}}">T{{a.tier}} · {{a.nome}} (Sg {{a.sogliaMaggiore}}/{{a.sogliaGrave}} · {{a.caselleArmatura}} caselle)</option>{{/each}}
+      </select>
+      <button type="button" class="dh-btn-mini" data-action="aggiungiArmatura">+ Aggiungi</button>
+    </div>
     <ul class="dh-list">
       {{#each armature as |a|}}
         <li class="dh-list-item" data-item-id="{{a.id}}">
@@ -277,8 +305,14 @@
     <h3 class="dh-block-title">
       Carte Dominio
       <span class="dh-info">Dotazione max: {{system.carteDotazione.max}}</span>
-      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="domainCard">+ Carta</button>
     </h3>
+    <div class="dh-add-row">
+      <select name="_selCarta">
+        <option value="">— scegli una carta ({{dbCarte.length}} disponibili) —</option>
+        {{#each dbCarte as |c|}}<option value="{{c.dominio}}||{{c.nome}}">[{{c.dominio}}] Lv{{c.livello}} · {{c.nome}}</option>{{/each}}
+      </select>
+      <button type="button" class="dh-btn-mini" data-action="aggiungiCarta">+ Aggiungi</button>
+    </div>
     <ul class="dh-list">
       {{#each dominii as |c|}}
         <li class="dh-list-item" data-item-id="{{c.id}}">

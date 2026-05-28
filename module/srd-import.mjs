@@ -55,30 +55,31 @@ export async function importSRD({ silent = false } = {}) {
       system: {
         description: c.descrizione || "",
         domini: c.domini || [],
-        evasioneBase: c.evasione ?? 10,
-        pfBase: c.pf ?? 6,
-        stressBase: c.stress ?? 6,
-        speranzaBase: c.speranza ?? 2,
-        esperienzaIniziale: c.esperienzaIniziale ?? "",
-        equipaggiamentoIniziale: c.equipaggiamento ?? "",
-        privilegioClasse: c.privilegio ?? { nome: "", descrizione: "" },
-        movimentoSpe: c.movimento ?? { nome: "", descrizione: "" }
+        evasioneBase: c.evasioneIniziale ?? c.evasione ?? 10,
+        pfBase: c.pfIniziali ?? c.pf ?? 6,
+        soglieDanno: c.soglieDanno ?? { Minore: 6, Moderato: 12, Grave: 19, Critico: 27 },
+        oggettiClasse: c.oggettiClasse ?? "",
+        privilegioSperanza: c.privilegioSperanza ?? { nome: "", descrizione: "" },
+        privilegiClasse: Array.isArray(c.privilegiClasse) ? c.privilegiClasse : [],
+        sottoclassiNomi: c.sottoclassi ?? []
       }
     });
   }
 
   // SOTTOCLASSI
   const fSotto = await ensureFolder("Sottoclassi", "Item");
-  for (const [nome, s] of Object.entries(data.SOTTOCLASSI ?? {})) {
+  for (const [nome, sc] of Object.entries(data.SOTTOCLASSI ?? {})) {
     items.push({
       name: nome, type: "subclass", folder: fSotto.id,
       system: {
-        description: s.descrizione ?? "",
-        classe: s.classe ?? "",
-        spellcast: s.spellcast ?? "",
-        fondamento: s.fondamento ?? { nome: "", descrizione: "" },
-        specializzazione: s.specializzazione ?? { nome: "", descrizione: "" },
-        maestria: s.maestria ?? { nome: "", descrizione: "" }
+        description: sc.descrizione ?? "",
+        classe: sc.classe ?? "",
+        tratto: sc.tratto ?? "",
+        base:     Array.isArray(sc.base)     ? sc.base     : [],
+        spec:     Array.isArray(sc.spec)     ? sc.spec     : [],
+        maestria: Array.isArray(sc.maestria) ? sc.maestria : [],
+        livelloSpec:     sc.livelloSpec ?? 2,
+        livelloMaestria: sc.livelloMaestria ?? 5
       }
     });
   }
@@ -90,6 +91,7 @@ export async function importSRD({ silent = false } = {}) {
       name: nome, type: "ancestry", folder: fAnc.id,
       system: {
         description: o.descrizione ?? "",
+        tratti: Array.isArray(o.tratti) ? o.tratti : [],
         tratto1: o.tratti?.[0] ?? { nome: "", descrizione: "" },
         tratto2: o.tratti?.[1] ?? { nome: "", descrizione: "" }
       }
@@ -103,7 +105,7 @@ export async function importSRD({ silent = false } = {}) {
       name: nome, type: "community", folder: fCom.id,
       system: {
         description: c.descrizione ?? "",
-        privilegio: c.privilegio ?? { nome: "", descrizione: c.descrizione ?? "" }
+        privilegio: c.tratto ?? c.privilegio ?? { nome: "", descrizione: "" }
       }
     });
   }
@@ -119,7 +121,8 @@ export async function importSRD({ silent = false } = {}) {
         system: {
           description: c.d ?? c.descrizione ?? "",
           dominio: dominio,
-          livello: c.lv ?? c.livello ?? 1,
+          livello: c.l ?? c.lv ?? c.livello ?? 1,
+          costo: c.c ?? null,
           tipo: c.t ?? c.tipo ?? "Privilegio",
           ricarica: c.ric ?? c.ricarica ?? ""
         }

@@ -22,6 +22,15 @@ export function registerHopeFearSettings() {
     default: 12
   });
 
+  game.settings.register(NS, "temaScuro", {
+    name: "Tema scuro (schede)",
+    hint: "Usa il tema scuro navy per le schede invece della pergamena chiara.",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
   game.settings.register(NS, "automatizzaOroDanno", {
     name: "Automatizza danno e Caselle Armatura",
     hint: "Se attivo, il sistema applica automaticamente PF / Caselle Armatura ricevendo il danno via chat-card.",

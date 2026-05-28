@@ -1,38 +1,73 @@
-<div class="dh-sheet-root">
+<div class="dh-sheet-root {{#unless editMode}}dh-locked{{/unless}} {{#if temaScuro}}dh-dark{{/if}}">
+
 {{!-- === HEADER === --}}
 <header class="dh-character-header">
   <div class="dh-portrait">
     <img src="{{actor.img}}" data-edit="img" alt="{{actor.name}}"/>
   </div>
   <div class="dh-id">
-    <input type="text" name="name" value="{{actor.name}}" placeholder="Nome del personaggio" class="dh-name"/>
+    <input type="text" name="name" value="{{actor.name}}" placeholder="Nome del personaggio" class="dh-name" {{#unless editMode}}readonly{{/unless}}/>
     <div class="dh-meta-row">
-      <label class="dh-meta-grow">Classe <input type="text" name="system.classe" value="{{system.classe}}"/></label>
-      <label class="dh-meta-grow">Sottoclasse <input type="text" name="system.sottoclasse" value="{{system.sottoclasse}}"/></label>
+      <label class="dh-meta-grow">Classe <input type="text" name="system.classe" value="{{system.classe}}" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label class="dh-meta-grow">Sottoclasse <input type="text" name="system.sottoclasse" value="{{system.sottoclasse}}" {{#unless editMode}}readonly{{/unless}}/></label>
     </div>
     <div class="dh-meta-row">
-      <label class="dh-meta-grow">Discendenza <input type="text" name="system.retaggio" value="{{system.retaggio}}"/></label>
-      <label class="dh-meta-grow">Comunità <input type="text" name="system.comunita" value="{{system.comunita}}"/></label>
-      <label class="dh-meta-num">Liv. <input type="number" name="system.livello.value" value="{{system.livello.value}}" min="1" max="10"/></label>
+      <label class="dh-meta-grow">Discendenza <input type="text" name="system.retaggio" value="{{system.retaggio}}" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label class="dh-meta-grow">Comunità <input type="text" name="system.comunita" value="{{system.comunita}}" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label class="dh-meta-num">Liv. <input type="number" name="system.livello.value" value="{{system.livello.value}}" min="1" max="10" {{#unless editMode}}readonly{{/unless}}/></label>
       <label class="dh-meta-num">Tier <input type="number" value="{{system.tier}}" disabled/></label>
     </div>
   </div>
 </header>
 
-{{!-- === TABS NAV === --}}
-<nav class="dh-tabs">
-  {{#each tabs as |t|}}
-    <a class="dh-tab {{#if t.active}}active{{/if}}" data-action="changeTab" data-tab="{{t.id}}">
-      <i class="fa-solid {{t.icon}}"></i> {{t.label}}
-    </a>
-  {{/each}}
-</nav>
+{{!-- === TAB BAR: tabs a sinistra, lock + riposi a destra === --}}
+<div class="dh-tab-bar">
+  <nav class="dh-tabs">
+    {{#each tabs as |t|}}
+      <a class="dh-tab {{#if t.active}}active{{/if}}" data-action="changeTab" data-tab="{{t.id}}">
+        <i class="fa-solid {{t.icon}}"></i> {{t.label}}
+      </a>
+    {{/each}}
+  </nav>
+  <div class="dh-tab-bar-actions">
+    <button type="button" class="dh-btn dh-btn-icon-only {{#if editMode}}dh-lock-active{{/if}}"
+            data-action="toggleEditMode"
+            title="{{#if editMode}}Modifica attiva (click per bloccare){{else}}Modifica bloccata (click per sbloccare){{/if}}"
+            aria-label="Toggle Modifica">
+      <i class="fa-solid {{#if editMode}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+    </button>
+    <button type="button" class="dh-btn dh-btn-icon-only" data-action="shortRest" title="Riposo Breve" aria-label="Riposo Breve">
+      <i class="fa-solid fa-mug-saucer"></i>
+    </button>
+    <button type="button" class="dh-btn dh-btn-icon-only dh-btn-primary" data-action="longRest" title="Riposo Lungo" aria-label="Riposo Lungo">
+      <i class="fa-solid fa-bed"></i>
+    </button>
+    <button type="button" class="dh-btn dh-btn-icon-only dh-btn-level" data-action="avanzamento" title="Sali di Livello" aria-label="Avanzamento">
+      <i class="fa-solid fa-arrow-up-right-dots"></i>
+    </button>
+  </div>
+</div>
 
 {{!-- === TAB: PERSONAGGIO === --}}
 <section class="dh-tab-content {{#if (eq currentTab 'main')}}active{{/if}}" data-tab-content="main">
 
   <div class="dh-block">
-    <h3 class="dh-block-title">Tratti <span class="dh-info">Shift=vantaggio · Ctrl=svantaggio</span></h3>
+    <h3 class="dh-block-title">Tratti
+      <div class="dh-roll-mode" role="radiogroup" aria-label="Modalità tiro">
+        <button type="button" class="dh-mode-btn {{#if (eq rollMode 'svantaggio')}}active{{/if}}"
+                data-action="setRollMode" data-mode="svantaggio" title="Svantaggio (−1d6)" aria-label="Svantaggio">
+          <i class="fa-solid fa-circle-minus"></i>
+        </button>
+        <button type="button" class="dh-mode-btn {{#if (eq rollMode 'normale')}}active{{/if}}"
+                data-action="setRollMode" data-mode="normale" title="Tiro normale" aria-label="Normale">
+          <i class="fa-solid fa-equals"></i>
+        </button>
+        <button type="button" class="dh-mode-btn {{#if (eq rollMode 'vantaggio')}}active{{/if}}"
+                data-action="setRollMode" data-mode="vantaggio" title="Vantaggio (+1d6)" aria-label="Vantaggio">
+          <i class="fa-solid fa-circle-plus"></i>
+        </button>
+      </div>
+    </h3>
     <div class="dh-tratti-grid">
       {{#each trattiList as |t|}}
         <div class="dh-tratto-card">
@@ -41,7 +76,7 @@
             <span class="dh-tratto-val">{{t.segno}}{{t.valore}}</span>
           </button>
           <div class="dh-tratto-edit">
-            <input type="number" name="system.tratti.{{t.key}}.valore" value="{{t.valore}}" class="dh-tratto-input" title="Modifica valore"/>
+            <input type="number" name="system.tratti.{{t.key}}.valore" value="{{t.valore}}" class="dh-tratto-input" {{#unless ../editMode}}readonly{{/unless}}/>
           </div>
         </div>
       {{/each}}
@@ -58,7 +93,7 @@
           {{#each cellsPf as |c|}}
             <span class="dh-cell pf {{#if c.filled}}filled{{/if}}" data-action="togglePf" data-idx="{{c.i}}"></span>
           {{/each}}
-          <input type="number" name="system.pf.max" value="{{system.pf.max}}" min="1" max="20" class="dh-track-max"/>
+          <input type="number" name="system.pf.max" value="{{system.pf.max}}" min="1" max="20" class="dh-track-max" {{#unless editMode}}readonly{{/unless}}/>
         </div>
       </div>
 
@@ -68,12 +103,15 @@
           {{#each cellsStress as |c|}}
             <span class="dh-cell stress {{#if c.filled}}filled{{/if}}" data-action="toggleStress" data-idx="{{c.i}}"></span>
           {{/each}}
-          <input type="number" name="system.stress.max" value="{{system.stress.max}}" min="1" max="20" class="dh-track-max"/>
+          <input type="number" name="system.stress.max" value="{{system.stress.max}}" min="1" max="20" class="dh-track-max" {{#unless editMode}}readonly{{/unless}}/>
         </div>
       </div>
 
       <div class="dh-track">
-        <h4>Armatura <span class="dh-track-num">{{system.armatura.value}}/{{system.armatura.max}}</span></h4>
+        <h4>Armatura
+          {{#if armaturaEquip}}<span class="dh-armor-name">{{armaturaEquip.name}}</span>{{/if}}
+          <span class="dh-track-num">{{system.armatura.value}}/{{system.armatura.max}}</span>
+        </h4>
         <div class="dh-cells-row">
           {{#each cellsArmor as |c|}}
             <span class="dh-cell armor {{#if c.filled}}filled{{/if}}" data-action="toggleArmatura" data-idx="{{c.i}}"></span>
@@ -95,37 +133,66 @@
   </div>
 
   <div class="dh-block">
-    <h3 class="dh-block-title">Difesa</h3>
+    <h3 class="dh-block-title">Difesa
+      {{#if armaturaEquip}}<span class="dh-info">Valori da {{armaturaEquip.name}}</span>{{/if}}
+    </h3>
     <div class="dh-difesa-grid">
-      <label>Evasione (base) <input type="number" name="system.evasione.value" value="{{system.evasione.value}}"/></label>
+      <label>Evasione (base) <input type="number" name="system.evasione.value" value="{{system.evasione.value}}" {{#unless editMode}}readonly{{/unless}}/></label>
       <div class="dh-readout"><span>Evasione totale</span><strong>{{system.evasione.totale}}</strong></div>
-      <label>Competenza <input type="number" name="system.competenza.value" value="{{system.competenza.value}}" min="1" max="6"/></label>
-      <label>Soglia Maggiore <input type="number" name="system.soglie.maggiore" value="{{system.soglie.maggiore}}"/></label>
-      <div class="dh-readout dh-readout-alt"><span>Soglie</span><strong>{{system.soglie.maggiore}} / {{system.soglie.grave}}</strong></div>
-      <label>Soglia Grave <input type="number" name="system.soglie.grave" value="{{system.soglie.grave}}"/></label>
+      <label>Competenza <input type="number" name="system.competenza.value" value="{{system.competenza.value}}" min="1" max="6" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label>Soglia Maggiore <input type="number" name="system.soglie.maggiore" value="{{system.soglie.maggiore}}" {{#if armaturaEquip}}readonly{{else}}{{#unless editMode}}readonly{{/unless}}{{/if}}/></label>
+      <div class="dh-readout dh-readout-alt"><span>Soglie (tot)</span><strong>{{system.soglie.maggioreTot}} / {{system.soglie.graveTot}}</strong></div>
+      <label>Soglia Grave <input type="number" name="system.soglie.grave" value="{{system.soglie.grave}}" {{#if armaturaEquip}}readonly{{else}}{{#unless editMode}}readonly{{/unless}}{{/if}}/></label>
     </div>
+  </div>
+
+  <div class="dh-block dh-modificatori">
+    <h3 class="dh-block-title">Modificatori attivi</h3>
+    {{#if bonus.toggles.length}}
+      <div class="dh-toggles">
+        {{#each bonus.toggles as |t|}}
+          <label class="dh-toggle {{#if (lookup ../bonusAttivi t.key)}}on{{/if}}">
+            <input type="checkbox" data-action="toggleBonus" data-key="{{t.key}}" {{#if (lookup ../bonusAttivi t.key)}}checked{{/if}}/>
+            <span class="dh-toggle-label">{{t.label}}</span>
+            <span class="dh-toggle-note">{{t.note}}</span>
+          </label>
+        {{/each}}
+      </div>
+    {{/if}}
+    {{#if bonus.voci.length}}
+      <ul class="dh-bonus-list">
+        {{#each bonus.voci as |v|}}
+          <li>
+            <span class="dh-bonus-label">{{v.label}}</span>
+            <span class="dh-bonus-vals">
+              {{#if v.dEv}}<span class="dh-bv">Ev {{#if (gte v.dEv 0)}}+{{/if}}{{v.dEv}}</span>{{/if}}
+              {{#if v.dMod}}<span class="dh-bv">Magg {{#if (gte v.dMod 0)}}+{{/if}}{{v.dMod}}</span>{{/if}}
+              {{#if v.dGra}}<span class="dh-bv">Grave {{#if (gte v.dGra 0)}}+{{/if}}{{v.dGra}}</span>{{/if}}
+              {{#if v.dSlot}}<span class="dh-bv">Arm {{#if (gte v.dSlot 0)}}+{{/if}}{{v.dSlot}}</span>{{/if}}
+            </span>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p class="dh-empty">Nessun modificatore attivo.</p>
+    {{/if}}
   </div>
 
   <div class="dh-block">
     <h3 class="dh-block-title">
       Esperienze
-      <button type="button" class="dh-btn-mini" data-action="itemCreate" data-type="experience">+ Aggiungi</button>
+      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="experience">+ Aggiungi</button>
     </h3>
     <ul class="dh-list">
       {{#each esperienze as |it|}}
         <li class="dh-list-item" data-item-id="{{it.id}}">
           <strong>{{it.name}}</strong>
           <span class="dh-exp-bonus">+{{it.system.bonus}}</span>
-          <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
         </li>
       {{else}}<li class="dh-empty">Nessuna esperienza.</li>{{/each}}
     </ul>
-  </div>
-
-  <div class="dh-riposo">
-    <button type="button" class="dh-btn" data-action="shortRest"><i class="fa-solid fa-mug-saucer"></i> Riposo Breve</button>
-    <button type="button" class="dh-btn dh-btn-primary" data-action="longRest"><i class="fa-solid fa-bed"></i> Riposo Lungo</button>
   </div>
 </section>
 
@@ -135,7 +202,7 @@
   <div class="dh-block">
     <h3 class="dh-block-title">
       Armi
-      <button type="button" class="dh-btn-mini" data-action="itemCreate" data-type="weapon">+ Arma</button>
+      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="weapon">+ Arma</button>
     </h3>
     <ul class="dh-list">
       {{#each armi as |w|}}
@@ -145,8 +212,8 @@
           <span class="dh-arma-info">{{w.system.tratto}} · {{w.system.portata}} · {{w.system.dannoFormula}} {{w.system.danno.tipoDanno}}</span>
           <button type="button" class="dh-btn-mini" data-action="tiraArma" title="Attacca">⚔</button>
           <button type="button" class="dh-btn-mini" data-action="tiraDanno" title="Danno">💥</button>
-          <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
         </li>
       {{else}}<li class="dh-empty">Nessuna arma.</li>{{/each}}
     </ul>
@@ -155,7 +222,7 @@
   <div class="dh-block">
     <h3 class="dh-block-title">
       Armature
-      <button type="button" class="dh-btn-mini" data-action="itemCreate" data-type="armor">+ Armatura</button>
+      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="armor">+ Armatura</button>
     </h3>
     <ul class="dh-list">
       {{#each armature as |a|}}
@@ -164,8 +231,8 @@
           <strong>{{a.name}}</strong>
           <span class="dh-arma-info">Sg.M {{a.system.sogliaMaggiore}} · Sg.G {{a.system.sogliaGrave}} · {{a.system.caselleArmatura}} caselle</span>
           {{#if a.system.speciale}}<em>· {{a.system.speciale}}</em>{{/if}}
-          <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
         </li>
       {{else}}<li class="dh-empty">Nessuna armatura.</li>{{/each}}
     </ul>
@@ -174,7 +241,7 @@
   <div class="dh-block">
     <h3 class="dh-block-title">
       Inventario
-      <span>
+      <span class="dh-edit-only">
         <button type="button" class="dh-btn-mini" data-action="itemCreate" data-type="inventory">+ Oggetto</button>
         <button type="button" class="dh-btn-mini" data-action="itemCreate" data-type="consumable">+ Scorta</button>
       </span>
@@ -185,8 +252,8 @@
           <strong>{{it.name}}</strong>
           <span>×{{it.system.quantita}}</span>
           {{#if (eq it.type "consumable")}}<span class="dh-arma-info">({{it.system.usi.value}}/{{it.system.usi.max}})</span>{{/if}}
-          <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
         </li>
       {{else}}<li class="dh-empty">Inventario vuoto.</li>{{/each}}
     </ul>
@@ -195,9 +262,9 @@
   <div class="dh-block">
     <h3 class="dh-block-title">Oro</h3>
     <div class="dh-oro-grid">
-      <label>Manciate <input type="number" name="system.oro.manciate" value="{{system.oro.manciate}}" min="0"/></label>
-      <label>Sacchi <input type="number" name="system.oro.sacchi" value="{{system.oro.sacchi}}" min="0"/></label>
-      <label>Scrigni <input type="number" name="system.oro.scrigni" value="{{system.oro.scrigni}}" min="0"/></label>
+      <label>Manciate <input type="number" name="system.oro.manciate" value="{{system.oro.manciate}}" min="0" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label>Sacchi <input type="number" name="system.oro.sacchi" value="{{system.oro.sacchi}}" min="0" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label>Scrigni <input type="number" name="system.oro.scrigni" value="{{system.oro.scrigni}}" min="0" {{#unless editMode}}readonly{{/unless}}/></label>
     </div>
   </div>
 </section>
@@ -209,7 +276,7 @@
     <h3 class="dh-block-title">
       Carte Dominio
       <span class="dh-info">Dotazione max: {{system.carteDotazione.max}}</span>
-      <button type="button" class="dh-btn-mini" data-action="itemCreate" data-type="domainCard">+ Carta</button>
+      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="domainCard">+ Carta</button>
     </h3>
     <ul class="dh-list">
       {{#each dominii as |c|}}
@@ -218,16 +285,16 @@
           <strong>{{c.name}}</strong>
           <span class="dh-arma-info">Lv {{c.system.livello}} · {{c.system.tipo}}</span>
           <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
         </li>
-      {{else}}<li class="dh-empty">Nessuna carta. Trascinala qui dalla cartella "Carte Dominio".</li>{{/each}}
+      {{else}}<li class="dh-empty">Nessuna carta. Trascinala dalla cartella "Carte Dominio".</li>{{/each}}
     </ul>
   </div>
 
   <div class="dh-block">
     <h3 class="dh-block-title">
       Privilegi
-      <button type="button" class="dh-btn-mini" data-action="itemCreate" data-type="feature">+ Privilegio</button>
+      <button type="button" class="dh-btn-mini dh-edit-only" data-action="itemCreate" data-type="feature">+ Privilegio</button>
     </h3>
     <ul class="dh-list">
       {{#each privilegi as |f|}}
@@ -235,8 +302,9 @@
           <div class="dh-row">
             <strong>{{f.name}}</strong>
             <span class="dh-feat-tipo">{{f.system.tipoPrivilegio}}</span>
+            {{#if f.system.fonte}}<span class="dh-feat-fonte">{{f.system.fonte}}</span>{{/if}}
             <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+            <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
           </div>
           {{#if f.system.description}}<div class="dh-desc">{{f.system.description}}</div>{{/if}}
         </li>
@@ -245,20 +313,107 @@
   </div>
 </section>
 
+{{!-- === TAB: FORME BESTIALI (Druido) === --}}
+<section class="dh-tab-content {{#if (eq currentTab 'bestie')}}active{{/if}}" data-tab-content="bestie">
+  {{#if formaAttiva}}
+    <div class="dh-block dh-forma-attiva">
+      <h3 class="dh-block-title">
+        <i class="fa-solid fa-paw"></i> Forma attiva: {{formaAttiva.nome}}
+        <button type="button" class="dh-btn-mini" data-action="tornaUmano">Torna umano</button>
+      </h3>
+      <div class="dh-forma-stats">
+        <span><strong>Tratto:</strong> {{formaAttiva.tratto}}</span>
+        <span><strong>Evasione:</strong> +{{formaAttiva.ev}}</span>
+        <span><strong>Attacco:</strong> {{formaAttiva.atk.t}} · {{formaAttiva.atk.p}} · {{formaAttiva.atk.d}}{{#if formaAttiva.atk.b}}+{{formaAttiva.atk.b}}{{/if}}</span>
+      </div>
+      <div class="dh-forma-abilita">
+        {{#each formaAttiva.abilita as |a|}}
+          <div class="dh-priv-item"><strong>{{a.n}}</strong><div class="dh-desc">{{a.d}}</div></div>
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="dh-block">
+    <h3 class="dh-block-title">Forme disponibili <span class="dh-info">(rango ≤ {{system.tier}})</span></h3>
+    <div class="dh-forme-grid">
+      {{#each formeBestiali as |f|}}
+        <div class="dh-forma-card">
+          <div class="dh-forma-card-h">
+            <span class="dh-forma-rango">R{{f.r}}</span>
+            <strong>{{f.nome}}</strong>
+            <button type="button" class="dh-btn-mini" data-action="trasforma" data-nome="{{f.nome}}">Trasforma</button>
+          </div>
+          <div class="dh-forma-esempi">{{f.esempi}}</div>
+          <div class="dh-forma-meta">{{f.tratto}} · Ev +{{f.ev}} · {{f.atk.d}}{{#if f.atk.b}}+{{f.atk.b}}{{/if}} {{f.atk.t}}</div>
+          {{#each f.abilita as |a|}}
+            <div class="dh-forma-ab"><strong>{{a.n}}:</strong> {{a.d}}</div>
+          {{/each}}
+        </div>
+      {{else}}
+        <p class="dh-empty">Nessuna forma disponibile.</p>
+      {{/each}}
+    </div>
+  </div>
+</section>
+
+{{!-- === TAB: COMPAGNO (Ranger) === --}}
+<section class="dh-tab-content {{#if (eq currentTab 'compagno')}}active{{/if}}" data-tab-content="compagno">
+  <div class="dh-block">
+    <h3 class="dh-block-title"><i class="fa-solid fa-dog"></i> Scheda del Compagno</h3>
+    <div class="dh-grid-2">
+      <label>Nome <input type="text" name="system.compagno.nome" value="{{compagno.nome}}"/></label>
+      <label>Tipo animale <input type="text" name="system.compagno.tipo" value="{{compagno.tipo}}" placeholder="lupo, falco…"/></label>
+    </div>
+  </div>
+
+  <div class="dh-block">
+    <h3 class="dh-block-title">Statistiche</h3>
+    <div class="dh-difesa-grid">
+      <label>Evasione <input type="number" name="system.compagno.evasione" value="{{compagno.evasione}}"/></label>
+      <div class="dh-track" style="grid-column: 2 / 4;">
+        <h4>Stress <span class="dh-track-num">{{compagno.stress.value}}/{{compagno.stress.max}}</span></h4>
+        <div class="dh-cells-row">
+          {{#each cmpStressCells as |c|}}
+            <span class="dh-cell stress {{#if c.filled}}filled{{/if}}" data-action="cmpStress" data-idx="{{c.i}}"></span>
+          {{/each}}
+          <button type="button" class="dh-btn-mini" data-action="cmpStressMax" data-delta="-1">−</button>
+          <button type="button" class="dh-btn-mini" data-action="cmpStressMax" data-delta="1">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dh-block">
+    <h3 class="dh-block-title">Attacco</h3>
+    <div class="dh-grid-2">
+      <label>Nome <input type="text" name="system.compagno.attacco.nome" value="{{compagno.attacco.nome}}"/></label>
+      <label>Portata <input type="text" name="system.compagno.attacco.portata" value="{{compagno.attacco.portata}}"/></label>
+      <label>Dado <input type="text" name="system.compagno.attacco.dado" value="{{compagno.attacco.dado}}"/></label>
+      <label>Bonus <input type="number" name="system.compagno.attacco.bonus" value="{{compagno.attacco.bonus}}"/></label>
+    </div>
+  </div>
+
+  <div class="dh-block">
+    <h3 class="dh-block-title">Esperienza & Potenziamenti</h3>
+    <label>Esperienza <input type="text" name="system.compagno.esperienza" value="{{compagno.esperienza}}"/></label>
+  </div>
+</section>
+
 {{!-- === TAB: BIOGRAFIA === --}}
 <section class="dh-tab-content {{#if (eq currentTab 'bio')}}active{{/if}}" data-tab-content="bio">
   <div class="dh-block">
     <h3 class="dh-block-title">Aspetto, pronomi, note</h3>
-    <label>Pronomi <input type="text" name="system.details.pronomi" value="{{system.details.pronomi}}"/></label>
-    <label>Aspetto <textarea name="system.details.aspetto" rows="3">{{system.details.aspetto}}</textarea></label>
+    <label>Pronomi <input type="text" name="system.details.pronomi" value="{{system.details.pronomi}}" {{#unless editMode}}readonly{{/unless}}/></label>
+    <label>Aspetto <textarea name="system.details.aspetto" rows="3" {{#unless editMode}}readonly{{/unless}}>{{system.details.aspetto}}</textarea></label>
   </div>
   <div class="dh-block">
     <h3 class="dh-block-title">Biografia</h3>
-    <textarea name="system.details.bio" rows="12" style="width: 100%;">{{system.details.bio}}</textarea>
+    <textarea name="system.details.bio" rows="12" style="width: 100%;" {{#unless editMode}}readonly{{/unless}}>{{system.details.bio}}</textarea>
   </div>
   <div class="dh-block">
     <h3 class="dh-block-title">Note</h3>
-    <textarea name="system.details.notes" rows="6" style="width: 100%;">{{system.details.notes}}</textarea>
+    <textarea name="system.details.notes" rows="6" style="width: 100%;" {{#unless editMode}}readonly{{/unless}}>{{system.details.notes}}</textarea>
   </div>
 </section>
 </div>

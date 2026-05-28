@@ -10,12 +10,14 @@ import { openTracker, refreshTracker } from "./hope-fear-tracker.mjs";
 import { DualityRoll } from "./duality-roll.mjs";
 import { importSRD } from "./srd-import.mjs";
 import { registerHelpers } from "./handlebars-helpers.mjs";
+import { registerAutoImport } from "./auto-import.mjs";
 
 const SYS = "daggerheart-ita";
 
 Hooks.once("init", async () => {
   console.log("Daggerheart ITA | init");
   registerHelpers();
+  registerAutoImport();
 
   // API globale
   game.daggerheart = { DH, DualityRoll, importSRD, openHopeFearTracker: openTracker };

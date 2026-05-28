@@ -1,16 +1,39 @@
 <div class="dh-grid-2">
   <label>Classe <input type="text" name="system.classe" value="{{system.classe}}"/></label>
-  <label>Tratto incantatore <input type="text" name="system.spellcast" value="{{system.spellcast}}"/></label>
+  <label>Tratto incantatore <input type="text" name="system.tratto" value="{{system.tratto}}" placeholder="es. Presenza"/></label>
+  <label>Liv. Specializzazione <input type="number" name="system.livelloSpec" value="{{system.livelloSpec}}" min="1" max="10"/></label>
+  <label>Liv. Maestria <input type="number" name="system.livelloMaestria" value="{{system.livelloMaestria}}" min="1" max="10"/></label>
 </div>
-<fieldset><legend>Fondamento</legend>
-  <label>Nome <input type="text" name="system.fondamento.nome" value="{{system.fondamento.nome}}"/></label>
-  <label>Descrizione <textarea name="system.fondamento.descrizione" rows="3">{{system.fondamento.descrizione}}</textarea></label>
+
+<fieldset><legend>Fondamento (Base)</legend>
+  {{#each system.base as |p|}}
+    <div class="dh-priv-item">
+      <strong>{{p.nome}}</strong>
+      <div class="dh-desc">{{p.descrizione}}</div>
+    </div>
+  {{else}}
+    <em class="dh-empty">Nessuno.</em>
+  {{/each}}
 </fieldset>
+
 <fieldset><legend>Specializzazione</legend>
-  <label>Nome <input type="text" name="system.specializzazione.nome" value="{{system.specializzazione.nome}}"/></label>
-  <label>Descrizione <textarea name="system.specializzazione.descrizione" rows="3">{{system.specializzazione.descrizione}}</textarea></label>
+  {{#each system.spec as |p|}}
+    <div class="dh-priv-item">
+      <strong>{{p.nome}}</strong>
+      <div class="dh-desc">{{p.descrizione}}</div>
+    </div>
+  {{else}}
+    <em class="dh-empty">Nessuna.</em>
+  {{/each}}
 </fieldset>
+
 <fieldset><legend>Maestria</legend>
-  <label>Nome <input type="text" name="system.maestria.nome" value="{{system.maestria.nome}}"/></label>
-  <label>Descrizione <textarea name="system.maestria.descrizione" rows="3">{{system.maestria.descrizione}}</textarea></label>
+  {{#each system.maestria as |p|}}
+    <div class="dh-priv-item">
+      <strong>{{p.nome}}</strong>
+      <div class="dh-desc">{{p.descrizione}}</div>
+    </div>
+  {{else}}
+    <em class="dh-empty">Nessuna.</em>
+  {{/each}}
 </fieldset>

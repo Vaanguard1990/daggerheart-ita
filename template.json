@@ -31,6 +31,15 @@
       "retaggio":   "",
       "comunita":   "",
       "carteDotazione": { "max": 5 },
+      "bonusAttivi": {},
+      "formaAttiva": null,
+      "compagno": {
+        "nome": "", "tipo": "", "evasione": 10,
+        "stress": { "value": 0, "max": 3 },
+        "esperienza": "",
+        "attacco": { "nome": "", "portata": "Mischia", "dado": "d6", "bonus": 0 },
+        "potenziamenti": []
+      },
       "oro": {
         "manciate": 0,
         "sacchi":   0,
@@ -91,20 +100,21 @@
       "domini": [],
       "evasioneBase": 10,
       "pfBase":       6,
-      "stressBase":   6,
-      "speranzaBase": 2,
-      "esperienzaIniziale": "",
-      "equipaggiamentoIniziale": "",
-      "privilegioClasse":    { "nome": "", "descrizione": "" },
-      "movimentoSpe":        { "nome": "", "descrizione": "" }
+      "soglieDanno":  { "Minore": 6, "Moderato": 12, "Grave": 19, "Critico": 27 },
+      "oggettiClasse": "",
+      "privilegioSperanza": { "nome": "", "descrizione": "" },
+      "privilegiClasse": [],
+      "sottoclassiNomi": []
     },
     "subclass": {
       "templates": ["base"],
       "classe":     "",
-      "spellcast":  "",
-      "fondamento": { "nome": "", "descrizione": "" },
-      "specializzazione": { "nome": "", "descrizione": "" },
-      "maestria":   { "nome": "", "descrizione": "" }
+      "tratto":     "",
+      "base":       [],
+      "spec":       [],
+      "maestria":   [],
+      "livelloSpec":     2,
+      "livelloMaestria": 5
     },
     "domainCard": {
       "templates": ["base"],

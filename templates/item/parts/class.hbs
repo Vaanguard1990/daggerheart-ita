@@ -1,17 +1,38 @@
 <div class="dh-grid-2">
   <label>Evasione base <input type="number" name="system.evasioneBase" value="{{system.evasioneBase}}"/></label>
   <label>PF base <input type="number" name="system.pfBase" value="{{system.pfBase}}"/></label>
-  <label>Stress base <input type="number" name="system.stressBase" value="{{system.stressBase}}"/></label>
-  <label>Speranza base <input type="number" name="system.speranzaBase" value="{{system.speranzaBase}}"/></label>
-  <label class="dh-full">Domini (lista) <input type="text" name="system.domini" value="{{system.domini}}" placeholder="Lama, Splendore"/></label>
-  <label class="dh-full">Esperienza iniziale <input type="text" name="system.esperienzaIniziale" value="{{system.esperienzaIniziale}}"/></label>
-  <label class="dh-full">Equipaggiamento iniziale <textarea name="system.equipaggiamentoIniziale" rows="3">{{system.equipaggiamentoIniziale}}</textarea></label>
+  <label class="dh-full">Domini
+    <input type="text" name="system.domini" value="{{system.domini}}" placeholder="Lama, Splendore"/>
+  </label>
+  <label class="dh-full">Sottoclassi
+    <input type="text" name="system.sottoclassiNomi" value="{{system.sottoclassiNomi}}" placeholder="Oratore, Trovatore"/>
+  </label>
+  <label class="dh-full">Oggetti iniziali
+    <textarea name="system.oggettiClasse" rows="2">{{system.oggettiClasse}}</textarea>
+  </label>
 </div>
-<fieldset><legend>Privilegio di Classe</legend>
-  <label>Nome <input type="text" name="system.privilegioClasse.nome" value="{{system.privilegioClasse.nome}}"/></label>
-  <label>Descrizione <textarea name="system.privilegioClasse.descrizione" rows="4">{{system.privilegioClasse.descrizione}}</textarea></label>
+
+<fieldset><legend>Soglie di Danno (Lv1)</legend>
+  <div class="dh-grid-2">
+    <label>Minore <input type="number" name="system.soglieDanno.Minore" value="{{system.soglieDanno.Minore}}"/></label>
+    <label>Moderato <input type="number" name="system.soglieDanno.Moderato" value="{{system.soglieDanno.Moderato}}"/></label>
+    <label>Grave <input type="number" name="system.soglieDanno.Grave" value="{{system.soglieDanno.Grave}}"/></label>
+    <label>Critico <input type="number" name="system.soglieDanno.Critico" value="{{system.soglieDanno.Critico}}"/></label>
+  </div>
 </fieldset>
-<fieldset><legend>Movimento Speciale</legend>
-  <label>Nome <input type="text" name="system.movimentoSpe.nome" value="{{system.movimentoSpe.nome}}"/></label>
-  <label>Descrizione <textarea name="system.movimentoSpe.descrizione" rows="3">{{system.movimentoSpe.descrizione}}</textarea></label>
+
+<fieldset><legend>Privilegio Speranza</legend>
+  <label>Nome <input type="text" name="system.privilegioSperanza.nome" value="{{system.privilegioSperanza.nome}}"/></label>
+  <label>Descrizione <textarea name="system.privilegioSperanza.descrizione" rows="3">{{system.privilegioSperanza.descrizione}}</textarea></label>
+</fieldset>
+
+<fieldset><legend>Privilegi di Classe</legend>
+  {{#each system.privilegiClasse as |p|}}
+    <div class="dh-priv-item">
+      <strong>{{p.nome}}</strong>
+      <div class="dh-desc">{{p.descrizione}}</div>
+    </div>
+  {{else}}
+    <em class="dh-empty">Nessun privilegio.</em>
+  {{/each}}
 </fieldset>

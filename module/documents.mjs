@@ -1,5 +1,6 @@
 // Document classes personalizzate per Daggerheart ITA
 import { DH } from "./config.mjs";
+import { calcolaBonus } from "./bonus-calc.mjs";
 
 export class DaggerheartActor extends Actor {
 
@@ -12,24 +13,40 @@ export class DaggerheartActor extends Actor {
       // Tier
       sys.tier = DH.tierDaLivello(sys.livello?.value ?? 1);
 
-      // Calcola caselle armatura totali da equipaggiamento
+      // Armatura equipaggiata
       const armEquip = this.items.find(i => i.type === "armor" && i.system.equipaggiato);
-      const caselle  = armEquip?.system?.caselleArmatura ?? 0;
-      sys.armatura.max = caselle;
-      if (sys.armatura.value > caselle) sys.armatura.value = caselle;
+      const lv = sys.livello?.value ?? 1;
 
-      // Soglie da armatura (se equipaggiata)
+      // Soglie base: da armatura se equipaggiata, altrimenti i valori manuali
+      let sogliaMaggBase = sys.soglie?.maggiore ?? 0;
+      let sogliaGravBase = sys.soglie?.grave ?? 0;
       if (armEquip) {
-        sys.soglie.maggiore = armEquip.system.sogliaMaggiore + (sys.livello?.value ?? 1);
-        sys.soglie.grave    = armEquip.system.sogliaGrave    + (sys.livello?.value ?? 1);
+        sogliaMaggBase = (armEquip.system.sogliaMaggiore ?? 0) + lv;
+        sogliaGravBase = (armEquip.system.sogliaGrave ?? 0) + lv;
       }
+      // Caselle armatura base
+      let caselleBase = armEquip?.system?.caselleArmatura ?? 0;
 
-      // Evasione totale (base classe + Agilità + bonus armatura/sottoclasse)
+      // Evasione base
       const baseEv = sys.evasione?.value ?? 10;
       const agi    = sys.tratti?.agilita?.valore ?? 0;
-      sys.evasione.totale = baseEv + agi + (sys.evasione?.bonus ?? 0);
 
-      // Bonus competenza per dadi danno arma (≈ tier per peso colpo)
+      // === BONUS AUTOMATICI (privilegi, carte, armi, toggle) ===
+      const b = calcolaBonus(this);
+      sys.bonus = b;  // esposto al template per il pannello "Modificatori"
+
+      // Frenesia: blocca l'armatura (slot azzerati)
+      const frenesia = sys.bonusAttivi?.frenesia;
+
+      sys.evasione.totale = baseEv + agi + (sys.evasione?.bonus ?? 0) + b.ev;
+      sys.soglie.maggioreTot = sogliaMaggBase + b.mod;
+      sys.soglie.graveTot    = sogliaGravBase + b.gra;
+
+      const caselleTot = frenesia ? 0 : caselleBase + b.slot;
+      sys.armatura.max = caselleTot;
+      if (sys.armatura.value > caselleTot) sys.armatura.value = caselleTot;
+
+      sys.armaturaEquipNome = armEquip?.name ?? null;
       sys.bonusCompetenzaDanno = sys.competenza?.value ?? 1;
     }
 

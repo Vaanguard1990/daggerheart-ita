@@ -11,7 +11,7 @@ Compatibile con **Foundry VTT v13+ (verificato su v14)**.
 1. In Foundry: **Configuration → Game Systems → Install System**
 2. Incolla:
    ```
-   https://github.com/giuseppesantostasi90-lang/daggerheart-ita/releases/latest/download/system.json
+   https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.json
    ```
 3. Foundry scaricherà e installerà l'ultima versione.
 
@@ -77,14 +77,14 @@ Dopo il push del tag, l'Action **Release** parte automaticamente:
 
 Foundry, all'avvio, fetcha l'URL nel campo `manifest` di `system.json`:
 ```
-https://github.com/giuseppesantostasi90-lang/daggerheart-ita/releases/latest/download/system.json
+https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.json
 ```
 
 Questo URL **risolve sempre alla release più recente**. Se la `version` lì
 è maggiore di quella installata, Foundry mostra "Update Available" e scarica il
 file in `download`:
 ```
-https://github.com/giuseppesantostasi90-lang/daggerheart-ita/releases/latest/download/system.zip
+https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.zip
 ```
 
 Nessuna configurazione extra necessaria dopo il setup iniziale.

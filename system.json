@@ -11,7 +11,7 @@
   "authors": [
     {
       "name": "Giuseppe Santostasi",
-      "url": "https://github.com/giuseppesantostasi90-lang"
+      "url": "https://github.com/Vaanguard1990"
     }
   ],
   "esmodules": ["module/daggerheart.mjs"],
@@ -57,7 +57,7 @@
   },
   "primaryTokenAttribute": "pf",
   "secondaryTokenAttribute": "stress",
-  "url": "https://github.com/giuseppesantostasi90-lang/daggerheart-ita",
-  "manifest": "https://github.com/giuseppesantostasi90-lang/daggerheart-ita/releases/latest/download/system.json",
-  "download": "https://github.com/giuseppesantostasi90-lang/daggerheart-ita/releases/latest/download/system.zip"
+  "url": "https://github.com/Vaanguard1990/daggerheart-ita",
+  "manifest": "https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.json",
+  "download": "https://github.com/Vaanguard1990/daggerheart-ita/releases/latest/download/system.zip"
 }

@@ -10,8 +10,10 @@ export class DaggerheartActor extends Actor {
     const sys = this.system;
 
     if (this.type === "character") {
-      // Tier
-      sys.tier = DH.tierDaLivello(sys.livello?.value ?? 1);
+      // Tier (equipaggiamento) e Rango (avanzamenti/forme)
+      const _lv = sys.livello?.value ?? 1;
+      sys.tier  = DH.tierDaLivello(_lv);
+      sys.rango = DH.rangoDaLivello(_lv);
 
       // Armatura equipaggiata
       const armEquip = this.items.find(i => i.type === "armor" && i.system.equipaggiato);

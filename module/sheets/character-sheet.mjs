@@ -120,7 +120,7 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       const url = "systems/daggerheart-ita/assets/srd/all.json";
       const data = await foundry.utils.fetchJsonWithTimeout(url);
       const lv = this.actor.system.livello?.value ?? 1;
-      const rango = lv <= 1 ? 1 : lv <= 4 ? 2 : lv <= 7 ? 3 : 4;
+      const rango = DH.rangoDaLivello(lv);
       this._formeCache = (data.FORME_BESTIALI ?? []).filter(f => (f.r ?? 1) <= rango);
       return this._formeCache;
     } catch (e) {
@@ -188,8 +188,8 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     const it = this.actor.items.get(itemId);
     if (!it) return;
     const d = it.system.danno;
-    const tier = this.actor.system.tier ?? 1;
-    const num = Math.max(d.numDadi ?? 1, tier);
+    const comp = this.actor.system.competenza?.value ?? 1;
+    const num = Math.max(d.numDadi ?? 1, comp);
     const formula = `${num}${d.dado}${d.bonus ? (d.bonus >= 0 ? "+" : "") + d.bonus : ""}`;
     const roll = new Roll(formula);
     await roll.evaluate();

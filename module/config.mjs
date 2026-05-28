@@ -43,8 +43,10 @@ DH.tipiAmbienteColore = {
 DH.classi = ["Bardo","Consacrato","Druido","Fuorilegge","Guardiano","Guerriero","Mago","Ranger","Stregone"];
 DH.domini = ["Arcano","Lama","Ossa","Codice","Grazia","Mezzanotte","Saggezza","Splendore","Valore"];
 
-// Tier da livello (1: 1; 2: 2-4; 3: 5-7; 4: 8-10)
-DH.tierDaLivello = (lv) => lv <= 1 ? 1 : lv <= 4 ? 2 : lv <= 7 ? 3 : 4;
+// Tier da livello (per equipaggiamento): 1→1-4, 2→5-7, 3→8-9, 4→10
+DH.tierDaLivello = (lv) => lv <= 4 ? 1 : lv <= 7 ? 2 : lv <= 9 ? 3 : 4;
+// Rango da livello (per avanzamenti e forme bestiali): 1→1, 2→2-4, 3→5-7, 4→8-10
+DH.rangoDaLivello = (lv) => lv <= 1 ? 1 : lv <= 4 ? 2 : lv <= 7 ? 3 : 4;
 
 // Soglie iniziali (Lv1): Maggiore = 6+lv, Grave = 12+lv (regola generica; classi le sovrascrivono)
 DH.soglieDaLivello = (lv, base = { maggiore: 6, grave: 12 }) => ({

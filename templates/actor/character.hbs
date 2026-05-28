@@ -15,7 +15,8 @@
       <label class="dh-meta-grow">Discendenza <input type="text" name="system.retaggio" value="{{system.retaggio}}" {{#unless editMode}}readonly{{/unless}}/></label>
       <label class="dh-meta-grow">Comunità <input type="text" name="system.comunita" value="{{system.comunita}}" {{#unless editMode}}readonly{{/unless}}/></label>
       <label class="dh-meta-num">Liv. <input type="number" name="system.livello.value" value="{{system.livello.value}}" min="1" max="10" {{#unless editMode}}readonly{{/unless}}/></label>
-      <label class="dh-meta-num">Tier <input type="number" value="{{system.tier}}" disabled/></label>
+      <label class="dh-meta-num">Tier <input type="number" value="{{system.tier}}" disabled title="Tier equipaggiamento"/></label>
+      <label class="dh-meta-num">Rango <input type="number" value="{{system.rango}}" disabled title="Rango avanzamenti"/></label>
     </div>
   </div>
 </header>
@@ -335,7 +336,7 @@
   {{/if}}
 
   <div class="dh-block">
-    <h3 class="dh-block-title">Forme disponibili <span class="dh-info">(rango ≤ {{system.tier}})</span></h3>
+    <h3 class="dh-block-title">Forme disponibili <span class="dh-info">(rango ≤ {{system.rango}})</span></h3>
     <div class="dh-forme-grid">
       {{#each formeBestiali as |f|}}
         <div class="dh-forma-card">

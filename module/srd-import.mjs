@@ -130,44 +130,66 @@ export async function importSRD({ silent = false } = {}) {
     }
   }
 
-  // ARMI
+  // ARMI — suddivise per Rango (Tier)
+  // Schema SRD: { t=tier, c='P'/'S', n=nome, p=portata, r=tratto, d=dado, b=bonus, m=magica, h=mani, f=speciale }
   const fArm = await ensureFolder("Armi", "Item");
+  const fArmiTier = {};
+  const nomeTierArma = { 1: "Tier 1", 2: "Tier 2", 3: "Tier 3", 4: "Tier 4" };
+  for (const [t, label] of Object.entries(nomeTierArma)) {
+    const sub = await ensureFolder(`Armi – ${label}`, "Item");
+    await sub.update({ folder: fArm.id }).catch(() => {});
+    fArmiTier[t] = sub;
+  }
+
   for (const a of (data.ARMI ?? [])) {
-    // formato atteso: { nome, categoria, tratto, portata, danno: "1d8 fis", tier, ... }
-    const dannoMatch = /(\d+)d(\d+)(?:([+-]\d+))?\s*(fis|mag)?/.exec(a.danno || "");
+    const tier = a.t ?? a.tier ?? 1;
+    const folderId = (fArmiTier[tier] ?? fArm).id;
+    const dadoMatch = /d(\d+)/.exec(a.d ?? "d6");
+    const categoria = (a.c === "S") ? "Secondaria" : "Primaria";
     items.push({
-      name: a.nome ?? "Arma", type: "weapon", folder: fArm.id,
+      name: a.n ?? a.nome ?? "Arma senza nome", type: "weapon", folder: folderId,
       system: {
-        description: a.descrizione ?? "",
-        categoria: a.categoria ?? "Primaria",
-        tratto: a.tratto ?? "Agilità",
-        portata: a.portata ?? "Mischia",
+        description: a.f ?? a.speciale ?? "",
+        categoria,
+        tratto: a.r ?? a.tratto ?? "Agilità",
+        portata: a.p ?? a.portata ?? "Mischia",
         danno: {
-          numDadi: dannoMatch ? parseInt(dannoMatch[1], 10) : 1,
-          dado: dannoMatch ? `d${dannoMatch[2]}` : "d6",
-          bonus: dannoMatch && dannoMatch[3] ? parseInt(dannoMatch[3], 10) : 0,
-          tipoDanno: dannoMatch && dannoMatch[4] === "mag" ? "magico" : "fisico"
+          numDadi: 1,
+          dado: dadoMatch ? `d${dadoMatch[1]}` : "d6",
+          bonus: a.b ?? 0,
+          tipoDanno: (a.m || a.magica) ? "magico" : "fisico"
         },
-        speciale: a.speciale ?? "",
-        tier: a.tier ?? 1,
-        magica: !!a.magica,
-        dueMani: !!a.dueMani
+        speciale: a.f ?? a.speciale ?? "",
+        tier,
+        magica: !!(a.m ?? a.magica),
+        dueMani: (a.h === "2" || a.h === 2 || a.dueMani === true)
       }
     });
   }
 
-  // ARMATURE
+  // ARMATURE — suddivise per Rango (Tier)
+  // Schema SRD: { t=tier, n=nome, mj=sogliaMaggiore, sv=sogliaGrave, sc=caselleArmatura, f=speciale }
   const fArmo = await ensureFolder("Armature", "Item");
+  const fArmatureTier = {};
+  const nomeTierArmatura = { 1: "Tier 1", 2: "Tier 2", 3: "Tier 3", 4: "Tier 4" };
+  for (const [t, label] of Object.entries(nomeTierArmatura)) {
+    const sub = await ensureFolder(`Armature – ${label}`, "Item");
+    await sub.update({ folder: fArmo.id }).catch(() => {});
+    fArmatureTier[t] = sub;
+  }
+
   for (const a of (data.ARMATURE ?? [])) {
+    const tier = a.t ?? a.tier ?? 1;
+    const folderId = (fArmatureTier[tier] ?? fArmo).id;
     items.push({
-      name: a.nome ?? a.n ?? "Armatura", type: "armor", folder: fArmo.id,
+      name: a.n ?? a.nome ?? "Armatura senza nome", type: "armor", folder: folderId,
       system: {
-        description: a.descrizione ?? "",
+        description: a.f ?? a.speciale ?? "",
         sogliaMaggiore: a.mj ?? a.sogliaMaggiore ?? 0,
         sogliaGrave: a.sv ?? a.sogliaGrave ?? 0,
         caselleArmatura: a.sc ?? a.caselleArmatura ?? 0,
         speciale: a.f ?? a.speciale ?? "",
-        tier: a.tier ?? 1
+        tier
       }
     });
   }
@@ -224,7 +246,7 @@ export async function importSRD({ silent = false } = {}) {
         rango: e.rango || 1,
         difficolta: e.difficolta || 10,
         impeti: e.impeti || "",
-        potenzialiAvversari: e.potenzialiAvversari || ""
+        potenzialiAvversari: e.avversariPotenziali ?? e.potenzialiAvversari ?? ""
       },
       items: features
     });

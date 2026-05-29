@@ -165,16 +165,25 @@
 .dh-track-empty { font-style: italic; color: var(--dh-fg-dim); font-size: 11px; }
 
 /* Difesa */
-.dh-difesa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; align-items: end; }
+.dh-difesa-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: .5rem;
+}
+.dh-difesa-extra {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding-top: .15rem;
+}
 .dh-readout {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: .6rem .4rem .45rem; background: var(--dh-bg-3); border-radius: 6px;
-  border: 1px solid var(--dh-gold); gap: .1rem; cursor: default;
-  transition: background .15s, box-shadow .15s;
+  padding: .55rem .4rem .45rem; background: var(--dh-bg-3); border-radius: 5px;
+  border: 1px solid var(--dh-gold); gap: .15rem; cursor: default;
+  transition: background .15s, box-shadow .15s; min-height: 58px;
 }
-.dh-readout-icon { font-size: 13px; color: var(--dh-gold); opacity: .7; margin-bottom: .1rem; }
-.dh-readout-label { font-size: 9px; color: var(--dh-fg-dim); text-transform: uppercase; letter-spacing: .6px; font-weight: 700; }
-.dh-readout-val { font-size: 28px; color: var(--dh-gold); font-weight: 800; line-height: 1; }
+.dh-readout-label { font-size: 9px; color: var(--dh-fg-dim); text-transform: uppercase; letter-spacing: .7px; font-weight: 700; }
+.dh-readout-val { font-size: 30px; color: var(--dh-gold); font-weight: 800; line-height: 1; }
 .dh-readout span { font-size: 10px; color: var(--dh-fg-dim); text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
 .dh-readout strong { font-size: 24px; color: var(--dh-gold); font-weight: 800; line-height: 1; }
 
@@ -358,8 +367,6 @@
   font-size: 13px; font-weight: 700; color: var(--dh-gold); min-width: 24px; text-align: center;
 }
 
-/* === Difesa 3 colonne simmetrica === */
-.dh-difesa-grid { grid-template-columns: repeat(3, 1fr); gap: .55rem; }
 .dh-readout-alt { background: var(--dh-card); border: 1px dashed var(--dh-border); }
 .dh-readout-alt strong { font-size: 18px; }
 
@@ -704,12 +711,10 @@
 }
 .dh-readout-click:hover span,
 .dh-readout-click:hover strong { color: #fff !important; }
-.dh-readout-click:hover .dh-readout-icon,
 .dh-readout-click:hover .dh-readout-label,
 .dh-readout-click:hover .dh-readout-val { color: #fff !important; }
-.dh-competenza-label { display: flex; flex-direction: column; align-items: center; gap: .2rem; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--dh-fg-dim); }
-.dh-competenza-label input { text-align: center; width: 50px; }
-.dh-difesa-note { grid-column: 1 / -1; text-align: center; padding-top: .25rem; }
+.dh-competenza-label { display: flex; align-items: center; gap: .4rem; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--dh-fg-dim); flex-shrink: 0; }
+.dh-competenza-label input { text-align: center; width: 44px; font-size: 14px; font-weight: 800; color: var(--dh-gold); }
 .dh-soglie-hint { grid-column: 1 / -1; font-size: 10px; color: var(--dh-fg-dim); text-align: center; }
 
 /* === Activation system === */

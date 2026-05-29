@@ -162,25 +162,22 @@
       {{#if armaturaEquip}}<span class="dh-info">Valori da {{armaturaEquip.name}}</span>{{/if}}
     </h3>
     <div class="dh-difesa-grid">
-      <button type="button" class="dh-readout dh-readout-click dh-readout-evasione" data-action="modEvasione" title="Clicca per modificare l'Evasione base">
-        <i class="fa-solid fa-shield-halved dh-readout-icon"></i>
+      <button type="button" class="dh-readout dh-readout-click" data-action="modEvasione" title="Clicca per modificare l'Evasione base">
         <span class="dh-readout-label">Evasione</span>
         <strong class="dh-readout-val">{{system.evasione.totale}}</strong>
       </button>
-      <button type="button" class="dh-readout dh-readout-click dh-readout-soglia" data-action="modSoglie" title="Clicca per modificare le Soglie">
-        <i class="fa-solid fa-heart-crack dh-readout-icon"></i>
+      <button type="button" class="dh-readout dh-readout-click" data-action="modSoglie" title="Clicca per modificare le Soglie">
         <span class="dh-readout-label">Soglia Maggiore</span>
         <strong class="dh-readout-val">{{system.soglie.maggioreTot}}</strong>
       </button>
-      <button type="button" class="dh-readout dh-readout-click dh-readout-soglia" data-action="modSoglie" title="Clicca per modificare le Soglie">
-        <i class="fa-solid fa-skull dh-readout-icon"></i>
+      <button type="button" class="dh-readout dh-readout-click" data-action="modSoglie" title="Clicca per modificare le Soglie">
         <span class="dh-readout-label">Soglia Grave</span>
         <strong class="dh-readout-val">{{system.soglie.graveTot}}</strong>
       </button>
-      <label class="dh-competenza-label"><i class="fa-solid fa-star"></i> Competenza
-        <input type="number" name="system.competenza.value" value="{{system.competenza.value}}" min="1" max="6" {{#unless editMode}}readonly{{/unless}}/>
-      </label>
-      <div class="dh-difesa-note">
+      <div class="dh-difesa-extra">
+        <label class="dh-competenza-label">Competenza
+          <input type="number" name="system.competenza.value" value="{{system.competenza.value}}" min="1" max="6" {{#unless editMode}}readonly{{/unless}}/>
+        </label>
         <span class="dh-info">sotto Maggiore = 1 PF · tra Maggiore e Grave = 2 PF · oltre Grave = 3 PF</span>
       </div>
     </div>

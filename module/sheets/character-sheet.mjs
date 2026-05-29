@@ -136,6 +136,21 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     super._onRender(context, options);
     const root = this.element;
     if (!root) return;
+
+    // Portrait click → FilePicker
+    const portrait = root.querySelector(".dh-portrait img");
+    if (portrait) {
+      portrait.style.cursor = "pointer";
+      portrait.title = "Clicca per cambiare l'immagine";
+      portrait.addEventListener("click", () => {
+        new FilePicker({
+          type: "image",
+          current: this.actor.img ?? "",
+          callback: path => this.actor.update({ img: path })
+        }).render(true);
+      });
+    }
+
     const map = {
       classe:      (v) => Applica.applicaClasse(this.actor, v),
       sottoclasse: (v) => Applica.applicaSottoclasse(this.actor, v),
@@ -403,7 +418,8 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     const it = this.actor.items.get(id);
     if (!it) return;
 
-    const costo = it.system.costoSperanza ?? 0;
+    const costoDefault = it.type === "domainCard" ? 1 : 0;
+    const costo = it.system.costoSperanza ?? costoDefault;
     const speranza = this.actor.system.speranza ?? { value: 0, max: 6 };
 
     if (costo > 0) {

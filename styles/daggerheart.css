@@ -342,20 +342,20 @@
 .dh-tratto-card .dh-tratto-tira:hover .dh-tratto-nome { color: rgba(255,255,255,.9); }
 .dh-tratto-card .dh-tratto-nome { font-size: 10px; }
 .dh-tratto-card .dh-tratto-val { font-size: 26px; }
-.dh-tratto-edit {
-  display: flex; align-items: center; justify-content: center;
-  padding: .2rem .35rem;
-  background: var(--dh-bg-3);
+.dh-tratto-edit { display: none; }
+.dh-tratto-stepper {
+  display: flex !important; align-items: center; justify-content: space-between;
+  padding: .2rem .35rem; background: var(--dh-bg-3); gap: .25rem;
 }
-.dh-tratto-edit::before {
-  content: "Mod.";
-  font-size: 9px; color: var(--dh-fg-dim); margin-right: .35rem;
-  text-transform: uppercase; letter-spacing: .5px; font-weight: 700;
+.dh-tratto-step {
+  background: none; border: 1px solid var(--dh-border); border-radius: 3px;
+  color: var(--dh-gold); font-size: 14px; font-weight: 800; line-height: 1;
+  padding: .1rem .4rem; cursor: pointer; flex: 0 0 auto;
+  transition: background .1s, color .1s;
 }
-.dh-tratto-card .dh-tratto-input {
-  width: 50px; text-align: center;
-  font-size: 12px; padding: .15rem .25rem;
-  background: var(--dh-card);
+.dh-tratto-step:hover { background: var(--dh-gold); color: #fff; border-color: var(--dh-gold); }
+.dh-tratto-step-val {
+  font-size: 13px; font-weight: 700; color: var(--dh-gold); min-width: 24px; text-align: center;
 }
 
 /* === Difesa 3 colonne simmetrica === */
@@ -461,32 +461,7 @@
   color: var(--dh-fg);
   margin: 0;
 }
-.dh-tratto-edit {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: .35rem !important;
-  padding: .25rem .35rem !important;
-  background: var(--dh-bg-3) !important;
-  min-height: 28px;
-}
-.dh-tratto-edit::before {
-  content: "MOD." !important;
-  font-size: 9px !important;
-  color: var(--dh-fg-dim) !important;
-  font-weight: 700 !important;
-  letter-spacing: .5px !important;
-  margin: 0 !important;
-}
-.dh-tratto-card .dh-tratto-input {
-  width: 44px !important;
-  text-align: center !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  padding: .15rem !important;
-  height: 22px;
-  box-sizing: border-box;
-}
+/* tratto-edit overrides removed - using stepper */
 
 /* === v0.1.7: segmented control modalità tiro === */
 .dh-roll-mode {
@@ -729,8 +704,47 @@
 }
 .dh-readout-click:hover span,
 .dh-readout-click:hover strong { color: #fff !important; }
+.dh-readout-click:hover .dh-readout-icon,
+.dh-readout-click:hover .dh-readout-label,
+.dh-readout-click:hover .dh-readout-val { color: #fff !important; }
+.dh-competenza-label { display: flex; flex-direction: column; align-items: center; gap: .2rem; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--dh-fg-dim); }
+.dh-competenza-label input { text-align: center; width: 50px; }
 .dh-difesa-note { grid-column: 1 / -1; text-align: center; padding-top: .25rem; }
 .dh-soglie-hint { grid-column: 1 / -1; font-size: 10px; color: var(--dh-fg-dim); text-align: center; }
+
+/* === Activation system === */
+.dh-item-actions { display: flex; align-items: center; gap: .35rem; margin-left: auto; flex-wrap: wrap; }
+.dh-btn-attiva {
+  background: linear-gradient(135deg, var(--dh-hope) 0%, #d4911a 100%);
+  color: #fff; border: none; border-radius: 3px;
+  font-size: 10px; font-weight: 700; padding: .2rem .5rem; cursor: pointer;
+  transition: filter .15s;
+}
+.dh-btn-attiva:hover { filter: brightness(1.15); }
+.dh-costo-badge {
+  background: rgba(var(--dh-hope-rgb, 192,138,0),.15); color: var(--dh-hope, var(--dh-gold));
+  border: 1px solid var(--dh-hope, var(--dh-gold)); border-radius: 3px;
+  font-size: 9px; font-weight: 700; padding: .1rem .3rem;
+}
+.dh-ricarica-badge {
+  background: rgba(139,105,20,.12); color: var(--dh-fg-dim); border-radius: 3px;
+  font-size: 9px; padding: .1rem .3rem; border: 1px solid var(--dh-border);
+}
+.dh-gettoni {
+  display: flex; align-items: center; gap: .2rem;
+  background: rgba(139,105,20,.1); border: 1px solid var(--dh-border); border-radius: 3px;
+  padding: .1rem .25rem;
+}
+.dh-gettoni-val { font-size: 11px; font-weight: 700; color: var(--dh-gold); min-width: 32px; text-align: center; }
+/* Chat ability card */
+.dh-ability-card { background: var(--dh-card, #2a2016); border: 1px solid var(--dh-gold, #c08218); border-radius: 5px; overflow: hidden; font-size: 13px; }
+.dh-ability-header { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; background: rgba(139,105,20,.2); padding: .35rem .5rem; font-weight: 700; }
+.dh-ability-name { flex: 1 1 auto; }
+.dh-ability-tipo { font-size: 10px; color: var(--dh-fg-dim, #999); text-transform: uppercase; letter-spacing: .5px; }
+.dh-chat-badge { background: var(--dh-gold, #c08218); color: #fff; border-radius: 3px; font-size: 10px; padding: .1rem .35rem; }
+.dh-chat-cost { padding: .25rem .5rem; color: var(--dh-hope, var(--dh-gold)); font-size: 12px; font-weight: 700; border-bottom: 1px solid rgba(139,105,20,.2); }
+.dh-chat-ricarica { padding: .2rem .5rem; font-size: 11px; color: var(--dh-fg-dim, #999); }
+.dh-chat-desc { padding: .3rem .5rem .4rem; font-size: 12px; line-height: 1.5; }
 
 /* === v0.3.2: avanzamento — dialog principale === */
 .dh-adv-livello-info {

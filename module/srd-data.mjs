@@ -91,8 +91,7 @@ export async function getArmature() {
 }
 
 export function normalizzaArma(a) {
-  // Schema jsx arma: { t (tier), c (categoria S/P), n (nome), p (portata), r (tratto), d (dado), b (bonus), m (magica), h (mani), f (feature) }
-  const dadoMatch = /d(\d+)/.exec(a.d || "d6");
+  // Schema SRD: { t=tier, c='P'/'S', n=nome, p=portata, r=tratto, d=dado, b=bonus, m=magica, h=mani, f=speciale }
   return {
     nome: a.n ?? a.nome ?? "Arma",
     tier: a.t ?? a.tier ?? 1,
@@ -101,15 +100,15 @@ export function normalizzaArma(a) {
     tratto: a.r ?? a.tratto ?? "Agilità",
     dado: a.d ?? "d6",
     bonus: a.b ?? 0,
-    magica: !!a.m,
-    dueMani: (a.h === "2" || a.dueMani === true),
+    magica: !!(a.m ?? a.magica),
+    dueMani: (a.h === "2" || a.h === 2 || a.dueMani === true),
     speciale: a.f ?? a.speciale ?? "",
-    tipoDanno: /mag/i.test(a.dmg || a.tipo || "") ? "magico" : "fisico"
+    tipoDanno: (a.m || a.magica) ? "magico" : "fisico"
   };
 }
 
 export function normalizzaArmatura(a) {
-  // Schema jsx armatura: { t (tier), n (nome), mj (soglia magg), sv (soglia grave), sc (caselle), f (feature) }
+  // Schema SRD: { t=tier, n=nome, mj=sogliaMaggiore, sv=sogliaGrave, sc=caselleArmatura, f=speciale }
   return {
     nome: a.n ?? a.nome ?? "Armatura",
     tier: a.t ?? a.tier ?? 1,

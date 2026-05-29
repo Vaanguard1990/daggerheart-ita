@@ -39,7 +39,10 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       avanzamento:     DaggerheartCharacterSheet._avanzamento,
       aggiungiCarta:   DaggerheartCharacterSheet._aggiungiCarta,
       modEvasione:     DaggerheartCharacterSheet._modEvasione,
-      modSoglie:       DaggerheartCharacterSheet._modSoglie
+      modSoglie:       DaggerheartCharacterSheet._modSoglie,
+      trattoStep:      DaggerheartCharacterSheet._trattoStep,
+      attivaItem:      DaggerheartCharacterSheet._attivaItem,
+      gettoniStep:     DaggerheartCharacterSheet._gettoniStep
     }
   };
 
@@ -384,5 +387,62 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     cmp.stress = cmp.stress ?? { value: 0, max: 3 };
     cmp.stress.max = Math.max(1, (cmp.stress.max ?? 3) + delta);
     await this.actor.update({ "system.compagno": cmp });
+  }
+
+  static async _trattoStep(event, target) {
+    const key = target.dataset.tratto;
+    const delta = parseInt(target.dataset.delta, 10);
+    if (!key || !Number.isFinite(delta)) return;
+    const cur = this.actor.system.tratti?.[key]?.valore ?? 0;
+    const nuovo = Math.max(-3, Math.min(4, cur + delta));
+    await this.actor.update({ [`system.tratti.${key}.valore`]: nuovo });
+  }
+
+  static async _attivaItem(event, target) {
+    const id = target.closest("[data-item-id]")?.dataset.itemId;
+    const it = this.actor.items.get(id);
+    if (!it) return;
+
+    const costo = it.system.costoSperanza ?? 0;
+    const speranza = this.actor.system.speranza ?? { value: 0, max: 6 };
+
+    if (costo > 0) {
+      if ((speranza.value ?? 0) < costo) {
+        ui.notifications.warn(`Non hai abbastanza Speranza (serve ${costo}, hai ${speranza.value ?? 0}).`);
+        return;
+      }
+      await this.actor.update({ "system.speranza.value": (speranza.value ?? 0) - costo });
+    }
+
+    const tipo = it.system.dominio ? "Carta Dominio" : (it.system.tipoPrivilegio ?? "Privilegio");
+    const dominioBadge = it.system.dominio ? `<span class="dh-chat-badge">${it.system.dominio}</span>` : "";
+    const costoHtml = costo > 0 ? `<div class="dh-chat-cost"><i class="fa-solid fa-star"></i> −${costo} Speranza</div>` : "";
+    const ricarica = it.system.ricarica ? `<div class="dh-chat-ricarica"><i class="fa-solid fa-rotate"></i> ${it.system.ricarica}</div>` : "";
+    const desc = it.system.description ? `<div class="dh-chat-desc">${it.system.description}</div>` : "";
+
+    const html = `<div class="dh-ability-card">
+    <div class="dh-ability-header">
+      ${dominioBadge}
+      <span class="dh-ability-name">${it.name}</span>
+      <span class="dh-ability-tipo">${tipo}</span>
+    </div>
+    ${costoHtml}${ricarica}${desc}
+  </div>`;
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: html
+    });
+  }
+
+  static async _gettoniStep(event, target) {
+    const id = target.closest("[data-item-id]")?.dataset.itemId;
+    const it = this.actor.items.get(id);
+    if (!it) return;
+    const delta = parseInt(target.dataset.delta, 10);
+    const cur = it.system.gettoni?.value ?? 0;
+    const max = it.system.gettoni?.max ?? 0;
+    const nuovo = Math.max(0, Math.min(max, cur + delta));
+    await it.update({ "system.gettoni.value": nuovo });
   }
 }

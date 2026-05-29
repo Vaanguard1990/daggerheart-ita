@@ -11,15 +11,17 @@ export class DaggerheartAdversarySheet extends HandlebarsApplicationMixin(ActorS
     window:   { resizable: true, contentClasses: ["scrollable"] },
     form:     { submitOnChange: true, closeOnSubmit: false },
     actions: {
-      changeTab:      DaggerheartAdversarySheet._changeTab,
-      tiraAttacco:    DaggerheartAdversarySheet._tiraAttacco,
-      tiraDanno:      DaggerheartAdversarySheet._tiraDanno,
-      togglePf:       DaggerheartAdversarySheet._togglePf,
-      toggleStress:   DaggerheartAdversarySheet._toggleStress,
-      itemEdit:       DaggerheartAdversarySheet._itemEdit,
-      itemDelete:     DaggerheartAdversarySheet._itemDelete,
-      itemCreate:     DaggerheartAdversarySheet._itemCreate,
-      spendiPaura:    DaggerheartAdversarySheet._spendiPaura
+      changeTab:            DaggerheartAdversarySheet._changeTab,
+      tiraAttacco:          DaggerheartAdversarySheet._tiraAttacco,
+      tiraDanno:            DaggerheartAdversarySheet._tiraDanno,
+      togglePf:             DaggerheartAdversarySheet._togglePf,
+      toggleStress:         DaggerheartAdversarySheet._toggleStress,
+      itemEdit:             DaggerheartAdversarySheet._itemEdit,
+      itemDelete:           DaggerheartAdversarySheet._itemDelete,
+      itemCreate:           DaggerheartAdversarySheet._itemCreate,
+      spendiPaura:          DaggerheartAdversarySheet._spendiPaura,
+      attivaCaratteristica: DaggerheartAdversarySheet._attivaCaratteristica,
+      gettoniStep:          DaggerheartAdversarySheet._gettoniStep
     }
   };
 
@@ -64,7 +66,9 @@ export class DaggerheartAdversarySheet extends HandlebarsApplicationMixin(ActorS
   static async _tiraAttacco() {
     const a = this.actor.system.attacco;
     const bonus = parseInt(a.bonus ?? 0, 10) || 0;
-    const roll = new Roll(`1d20 + ${bonus}[attacco]`);
+    const segno = bonus >= 0 ? "+" : "";
+    const formula = bonus !== 0 ? `1d20${segno}${bonus}` : "1d20";
+    const roll = new Roll(formula);
     await roll.evaluate();
     const html = `<div class="dh-att-card">
       <div class="dh-att-card-h"><i class="fa-solid fa-sword"></i> ${this.actor.name} attacca con ${a.nome || "Attacco"} (${a.portata || "-"})</div>
@@ -75,12 +79,13 @@ export class DaggerheartAdversarySheet extends HandlebarsApplicationMixin(ActorS
   static async _tiraDanno() {
     const a = this.actor.system.attacco;
     if (!a.danno) return;
-    const m = /(\d+d\d+(?:[+-]\d+)?)/.exec(a.danno);
+    const m = /(\d+[dD]\d+(?:[+-]\d+)?)/.exec(a.danno);
     if (!m) return;
     const roll = new Roll(m[1]);
     await roll.evaluate();
+    const tag = /mag/i.test(a.danno) ? "magico" : "fisico";
     const html = `<div class="dh-danno-card">
-      <div class="dh-danno-card-header"><i class="fa-solid fa-burst"></i> Danno · ${a.nome || this.actor.name}</div>
+      <div class="dh-danno-card-header"><i class="fa-solid fa-burst"></i> Danno · ${a.nome || this.actor.name} · ${tag}</div>
       <div>${await roll.render()}</div></div>`;
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: html, rolls: [roll], sound: CONFIG.sounds.dice });
   }
@@ -108,5 +113,50 @@ export class DaggerheartAdversarySheet extends HandlebarsApplicationMixin(ActorS
       content: `<div class="dh-fear-spent">Il GM spende <strong>1 Paura</strong> per <em>${this.actor.name}</em>.</div>`,
       speaker: ChatMessage.getSpeaker({ actor: this.actor })
     });
+  }
+
+  static async _attivaCaratteristica(event, target) {
+    const id = target.closest("[data-item-id]")?.dataset.itemId;
+    const it = this.actor.items.get(id);
+    if (!it) return;
+
+    const costo = it.system.costoPaura ?? 0;
+    if (costo > 0) {
+      const { getHopeFear, setHopeFear } = await import("../hope-fear.mjs");
+      const hf = getHopeFear();
+      if ((hf.paura ?? 0) < costo) {
+        ui.notifications.warn(`Non c'è abbastanza Paura (serve ${costo}, disponibile ${hf.paura ?? 0}).`);
+        return;
+      }
+      await setHopeFear({ paura: (hf.paura ?? 0) - costo });
+    }
+
+    const tipo = it.system.tipoPrivilegio ?? "Caratteristica";
+    const costoHtml = costo > 0 ? `<div class="dh-chat-cost dh-chat-cost-fear"><i class="fa-solid fa-skull"></i> −${costo} Paura</div>` : "";
+    const ricarica = it.system.ricarica ? `<div class="dh-chat-ricarica"><i class="fa-solid fa-rotate"></i> ${it.system.ricarica}</div>` : "";
+    const desc = it.system.description ? `<div class="dh-chat-desc">${it.system.description}</div>` : "";
+
+    const html = `<div class="dh-ability-card dh-ability-card-fear">
+  <div class="dh-ability-header">
+    <span class="dh-ability-name">${it.name}</span>
+    <span class="dh-ability-tipo">${tipo}</span>
+  </div>
+  ${costoHtml}${ricarica}${desc}
+</div>`;
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: html
+    });
+  }
+
+  static async _gettoniStep(event, target) {
+    const id = target.closest("[data-item-id]")?.dataset.itemId;
+    const it = this.actor.items.get(id);
+    if (!it) return;
+    const delta = parseInt(target.dataset.delta, 10);
+    const cur = it.system.gettoni?.value ?? 0;
+    const max = it.system.gettoni?.max ?? 0;
+    await it.update({ "system.gettoni.value": Math.max(0, Math.min(max, cur + delta)) });
   }
 }

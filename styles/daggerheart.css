@@ -788,3 +788,15 @@
 }
 .dh-sc-preview strong { display: block; margin-bottom: .2rem; }
 .dh-sc-preview p { margin: 0; color: var(--dh-fg-dim); }
+
+/* === v0.3.6: Paura avversari === */
+.dh-costo-paura {
+  background: rgba(90,40,40,.18); color: var(--dh-fear, #5a2828);
+  border-color: var(--dh-fear, #5a2828);
+}
+.dh-btn-attiva-fear {
+  background: linear-gradient(135deg, #7a3a3a 0%, #4a1a1a 100%) !important;
+}
+.dh-ability-card-fear { border-color: var(--dh-fear, #5a2828) !important; }
+.dh-ability-card-fear .dh-ability-header { background: rgba(90,40,40,.2); }
+.dh-chat-cost-fear { color: var(--dh-fear, #5a2828) !important; border-bottom-color: rgba(90,40,40,.2) !important; }

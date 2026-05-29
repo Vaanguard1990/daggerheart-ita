@@ -2,6 +2,7 @@ import { DH } from "../config.mjs";
 import { DualityRoll } from "../duality-roll.mjs";
 import { apriAvanzamento } from "../avanzamento.mjs";
 import * as Applica from "../applica-srd.mjs";
+import { parseCostoStress } from "../applica-srd.mjs";
 import * as SRD from "../srd-data.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -131,6 +132,7 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     }
   }
 
+  /** Aggancia i listener nativi ai selettori SRD dopo ogni render. */
   _onRender(context, options) {
     super._onRender(context, options);
     const root = this.element;
@@ -429,9 +431,25 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       await this.actor.update({ "system.speranza.value": (speranza.value ?? 0) - costo });
     }
 
+    // Stress: controlla campo o fallback da descrizione; chiedi conferma al giocatore
+    const costoStressField = it.system.costoStress ?? 0;
+    const costoStressParsed = costoStressField > 0 ? costoStressField : parseCostoStress(it.system.description ?? "");
+    if (costoStressParsed > 0) {
+      const stressAttuale = this.actor.system.stress?.value ?? 0;
+      const stressMax = this.actor.system.stress?.max ?? 6;
+      const ok = await foundry.applications.api.DialogV2.confirm({
+        window: { title: "Segna Stress" },
+        content: `<p>Questa abilità richiede di segnare <strong>${costoStressParsed} Stress</strong>.<br>Stress attuale: ${stressAttuale}/${stressMax}.<br><br>Vuoi segnarlo adesso?</p>`
+      }).catch(() => false);
+      if (ok) {
+        await this.actor.update({ "system.stress.value": Math.min(stressMax, stressAttuale + costoStressParsed) });
+      }
+    }
+
     const tipo = it.system.dominio ? "Carta Dominio" : (it.system.tipoPrivilegio ?? "Privilegio");
     const dominioBadge = it.system.dominio ? `<span class="dh-chat-badge">${it.system.dominio}</span>` : "";
     const costoHtml = costo > 0 ? `<div class="dh-chat-cost"><i class="fa-solid fa-star"></i> −${costo} Speranza</div>` : "";
+    const costoStressHtml = costoStressParsed > 0 ? `<div class="dh-chat-cost dh-chat-cost-stress"><i class="fa-solid fa-brain"></i> ${costoStressParsed} Stress</div>` : "";
     const ricarica = it.system.ricarica ? `<div class="dh-chat-ricarica"><i class="fa-solid fa-rotate"></i> ${it.system.ricarica}</div>` : "";
     const desc = it.system.description ? `<div class="dh-chat-desc">${it.system.description}</div>` : "";
 
@@ -441,7 +459,7 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       <span class="dh-ability-name">${it.name}</span>
       <span class="dh-ability-tipo">${tipo}</span>
     </div>
-    ${costoHtml}${ricarica}${desc}
+    ${costoHtml}${costoStressHtml}${ricarica}${desc}
   </div>`;
 
     await ChatMessage.create({

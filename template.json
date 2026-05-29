@@ -125,12 +125,13 @@
       "tipo":      "Privilegio",
       "ricarica":  "",
       "costoSperanza": 0,
+      "costoStress":   0,
       "gettoni": { "value": 0, "max": 0 }
     },
     "weapon": {
       "templates": ["base", "physical"],
       "categoria":      "Primaria",
-      "tratto":         "Agiltà",
+      "tratto":         "Agilità",
       "portata":        "Mischia",
       "danno": {
         "numDadi":   1,
@@ -159,6 +160,7 @@
       "ricarica":       "",
       "costoSperanza": 0,
       "costoPaura":    0,
+      "costoStress":   0,
       "gettoni": { "value": 0, "max": 0 }
     },
     "experience": {

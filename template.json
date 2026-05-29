@@ -125,6 +125,7 @@
       "tipo":      "Privilegio",
       "ricarica":  "",
       "costoSperanza": 0,
+      "costoStress":   0,
       "gettoni": { "value": 0, "max": 0 }
     },
     "weapon": {
@@ -159,6 +160,7 @@
       "ricarica":       "",
       "costoSperanza": 0,
       "costoPaura":    0,
+      "costoStress":   0,
       "gettoni": { "value": 0, "max": 0 }
     },
     "experience": {

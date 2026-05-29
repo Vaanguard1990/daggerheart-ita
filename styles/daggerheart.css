@@ -800,3 +800,4 @@
 .dh-ability-card-fear { border-color: var(--dh-fear, #5a2828) !important; }
 .dh-ability-card-fear .dh-ability-header { background: rgba(90,40,40,.2); }
 .dh-chat-cost-fear { color: var(--dh-fear, #5a2828) !important; border-bottom-color: rgba(90,40,40,.2) !important; }
+.dh-chat-cost-stress { color: #5a3a6a !important; border-bottom-color: rgba(90,58,106,.2) !important; }

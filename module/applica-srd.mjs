@@ -18,6 +18,23 @@ function parseCostoSperanza(desc) {
   return 0;
 }
 
+export function parseCostoPaura(desc) {
+  if (!desc) return 0;
+  const mN = desc.match(/[Ss]pendi(?:te)?\s+(\d+)\s+[Pp]aura/);
+  if (mN) return parseInt(mN[1], 10);
+  if (/[Ss]pendi(?:te)?\s+una\s+[Pp]aura/i.test(desc)) return 1;
+  return 0;
+}
+
+export function parseCostoStress(desc) {
+  if (!desc) return 0;
+  const mN = desc.match(/marca(?:te)?\s+(\d+)\s+[Ss]tress/i);
+  if (mN) return parseInt(mN[1], 10);
+  if (/marca(?:te)?\s+uno\s+[Ss]tress/i.test(desc)) return 1;
+  if (/marca(?:te)?\s+un\s+[Ss]tress/i.test(desc)) return 1;
+  return 0;
+}
+
 async function creaFeatures(actor, lista, fonteTag) {
   if (!lista.length) return;
   await actor.createEmbeddedDocuments("Item", lista.map(f => ({

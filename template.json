@@ -20,7 +20,8 @@
         "presenza":   { "valore": 0 },
         "conoscenza": { "valore": 0 }
       },
-      "livello":   { "value": 1 },
+      "livello":        { "value": 1 },
+      "trattiMarcati":  [],
       "competenza": { "value": 1 },
       "evasione":   { "value": 10, "bonus": 0 },
       "soglie":     { "maggiore": 6, "grave": 12, "override": null },

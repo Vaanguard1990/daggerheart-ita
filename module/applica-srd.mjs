@@ -9,12 +9,26 @@ async function pulisciFonte(actor, fonteTag) {
   if (orfani.length) await actor.deleteEmbeddedDocuments("Item", orfani.map(i => i.id));
 }
 
+// Estrae il costo Speranza dalla descrizione del privilegio
+function parseCostoSperanza(desc) {
+  if (!desc) return 0;
+  const mN = desc.match(/[Ss]pendi(?:te)?\s+(\d+)\s+[Ss]peranz/);
+  if (mN) return parseInt(mN[1], 10);
+  if (/[Ss]pendi(?:te)?\s+una\s+[Ss]peranza/i.test(desc)) return 1;
+  return 0;
+}
+
 async function creaFeatures(actor, lista, fonteTag) {
   if (!lista.length) return;
   await actor.createEmbeddedDocuments("Item", lista.map(f => ({
     name: f.nome,
     type: "feature",
-    system: { description: f.descrizione || "", tipoPrivilegio: f.tipo || "Generico", fonte: fonteTag }
+    system: {
+      description: f.descrizione || "",
+      tipoPrivilegio: f.tipo || "Generico",
+      fonte: fonteTag,
+      costoSperanza: f.costoSperanza ?? 0
+    }
   })));
 }
 
@@ -45,9 +59,9 @@ export async function applicaClasse(actor, nome) {
 
   const feats = [];
   if (c.privilegioSperanza?.nome)
-    feats.push({ nome: `[Speranza] ${c.privilegioSperanza.nome}`, descrizione: c.privilegioSperanza.descrizione, tipo: "Classe" });
+    feats.push({ nome: `[Speranza] ${c.privilegioSperanza.nome}`, descrizione: c.privilegioSperanza.descrizione, tipo: "Classe", costoSperanza: 3 });
   for (const p of (c.privilegiClasse ?? []))
-    feats.push({ nome: p.nome, descrizione: p.descrizione, tipo: "Classe" });
+    feats.push({ nome: p.nome, descrizione: p.descrizione, tipo: "Classe", costoSperanza: parseCostoSperanza(p.descrizione) });
   await creaFeatures(actor, feats, fonteTag);
 
   ui.notifications.info(`Classe ${nome} applicata.`);
@@ -117,7 +131,7 @@ export async function aggiungiCarta(actor, dominio, nomeCarta) {
   if (!c) return;
   await actor.createEmbeddedDocuments("Item", [{
     name: c.nome, type: "domainCard",
-    system: { description: c.descrizione, dominio: c.dominio, livello: c.livello, costo: c.costo, tipo: "Privilegio" }
+    system: { description: c.descrizione, dominio: c.dominio, livello: c.livello, costoSperanza: c.costo ?? 0, tipo: "Privilegio" }
   }]);
   ui.notifications.info(`Carta "${c.nome}" aggiunta.`);
 }

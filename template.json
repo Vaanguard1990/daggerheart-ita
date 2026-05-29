@@ -130,7 +130,7 @@
     "weapon": {
       "templates": ["base", "physical"],
       "categoria":      "Primaria",
-      "tratto":         "Agilità",
+      "tratto":         "Agiltà",
       "portata":        "Mischia",
       "danno": {
         "numDadi":   1,
@@ -158,6 +158,7 @@
       "fonte":          "",
       "ricarica":       "",
       "costoSperanza": 0,
+      "costoPaura":    0,
       "gettoni": { "value": 0, "max": 0 }
     },
     "experience": {

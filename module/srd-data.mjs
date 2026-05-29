@@ -108,7 +108,7 @@ export function normalizzaArma(a) {
 }
 
 export function normalizzaArmatura(a) {
-  // Schema SRD: { t=tier, n=nome, mj=sogliaMaggiore, sv=sogliaGrave, sc=caselleArmatura, f=speciale }
+  // Schema jsx armatura: { t (tier), n (nome), mj (soglia magg), sv (soglia grave), sc (caselle), f (feature) }
   return {
     nome: a.n ?? a.nome ?? "Armatura",
     tier: a.t ?? a.tier ?? 1,

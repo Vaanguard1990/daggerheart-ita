@@ -130,7 +130,7 @@ export async function importSRD({ silent = false } = {}) {
     }
   }
 
-  // ARMI — suddivise per Tier
+  // ARMI — suddivise per Rango (Tier)
   // Schema SRD: { t=tier, c='P'/'S', n=nome, p=portata, r=tratto, d=dado, b=bonus, m=magica, h=mani, f=speciale }
   const fArm = await ensureFolder("Armi", "Item");
   const fArmiTier = {};
@@ -167,7 +167,7 @@ export async function importSRD({ silent = false } = {}) {
     });
   }
 
-  // ARMATURE — suddivise per Tier
+  // ARMATURE — suddivise per Rango (Tier)
   // Schema SRD: { t=tier, n=nome, mj=sogliaMaggiore, sv=sogliaGrave, sc=caselleArmatura, f=speciale }
   const fArmo = await ensureFolder("Armature", "Item");
   const fArmatureTier = {};
@@ -206,6 +206,7 @@ export async function importSRD({ silent = false } = {}) {
       name: c.nome || "Caratteristica", type: "feature",
       system: { description: c.descrizione || "", tipoPrivilegio: c.tipo || "Passiva" }
     }));
+    // Estrai bonus attacco numerico
     const bonusAtk = parseInt(String(m.attacco?.bonus ?? "0").replace("+", ""), 10) || 0;
     actors.push({
       name: m.nome || "Avversario", type: "adversary", folder: fAvv.id,

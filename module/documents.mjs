@@ -19,31 +19,37 @@ export class DaggerheartActor extends Actor {
       const armEquip = this.items.find(i => i.type === "armor" && i.system.equipaggiato);
       const lv = sys.livello?.value ?? 1;
 
-      // Soglie base: da armatura se equipaggiata, altrimenti i valori manuali
-      let sogliaMaggBase = sys.soglie?.maggiore ?? 0;
-      let sogliaGravBase = sys.soglie?.grave ?? 0;
-      if (armEquip) {
-        sogliaMaggBase = (armEquip.system.sogliaMaggiore ?? 0) + lv;
-        sogliaGravBase = (armEquip.system.sogliaGrave ?? 0) + lv;
-      }
-      // Caselle armatura base
-      let caselleBase = armEquip?.system?.caselleArmatura ?? 0;
-
-      // Evasione base
-      const baseEv = sys.evasione?.value ?? 10;
-      const agi    = sys.tratti?.agilita?.valore ?? 0;
-
       // === BONUS AUTOMATICI (privilegi, carte, armi, toggle) ===
       const b = calcolaBonus(this);
-      sys.bonus = b;  // esposto al template per il pannello "Modificatori"
+      sys.bonus = b;
 
-      // Frenesia: blocca l'armatura (slot azzerati)
-      const frenesia = sys.bonusAttivi?.frenesia;
+      // --- EVASIONE: base (parte da 10) + bonus. NIENTE Agilità (regola Daggerheart) ---
+      const baseEv = sys.evasione?.value ?? 10;
+      sys.evasione.totale = baseEv + (sys.evasione?.bonus ?? 0) + b.ev;
 
-      sys.evasione.totale = baseEv + agi + (sys.evasione?.bonus ?? 0) + b.ev;
+      // --- SOGLIE: derivano SOLO dall'armatura + livello, poi + bonus ---
+      // Se è impostato un override manuale (system.soglie.override), usa quello come base.
+      const ov = sys.soglie?.override;
+      let sogliaMaggBase, sogliaGravBase;
+      if (ov && (Number.isFinite(ov.maggiore) || Number.isFinite(ov.grave))) {
+        sogliaMaggBase = Number.isFinite(ov.maggiore) ? ov.maggiore : 0;
+        sogliaGravBase = Number.isFinite(ov.grave) ? ov.grave : lv;
+      } else if (armEquip) {
+        sogliaMaggBase = (armEquip.system.sogliaMaggiore ?? 0) + lv;
+        sogliaGravBase = (armEquip.system.sogliaGrave ?? 0) + lv;
+      } else {
+        // Senza armatura: Maggiore 0, Grave = livello
+        sogliaMaggBase = 0;
+        sogliaGravBase = lv;
+      }
+      sys.soglie.maggiore = sogliaMaggBase;
+      sys.soglie.grave    = sogliaGravBase;
       sys.soglie.maggioreTot = sogliaMaggBase + b.mod;
       sys.soglie.graveTot    = sogliaGravBase + b.gra;
 
+      // --- ARMATURA (caselle): base armatura + bonus, azzerata da Frenesia ---
+      const frenesia = sys.bonusAttivi?.frenesia;
+      const caselleBase = armEquip?.system?.caselleArmatura ?? 0;
       const caselleTot = frenesia ? 0 : caselleBase + b.slot;
       sys.armatura.max = caselleTot;
       if (sys.armatura.value > caselleTot) sys.armatura.value = caselleTot;

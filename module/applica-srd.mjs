@@ -35,9 +35,7 @@ export async function applicaClasse(actor, nome) {
   const updates = { "system.classe": nome };
   if (Number.isFinite(c.evasioneIniziale ?? c.evasione)) updates["system.evasione.value"] = c.evasioneIniziale ?? c.evasione;
   if (Number.isFinite(c.pfIniziali ?? c.pf))             updates["system.pf.max"]         = c.pfIniziali ?? c.pf;
-  const sd = c.soglieDanno ?? {};
-  if (Number.isFinite(sd.Moderato)) updates["system.soglie.maggiore"] = sd.Moderato;
-  if (Number.isFinite(sd.Grave))    updates["system.soglie.grave"]    = sd.Grave;
+  // Le soglie NON vengono dalla classe: derivano dall'armatura + livello.
   updates["system.stress.max"] = 6;
   updates["system.speranza.max"] = 6;
   if (!(actor.system.speranza?.value > 0)) updates["system.speranza.value"] = 2;

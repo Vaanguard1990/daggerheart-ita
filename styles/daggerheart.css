@@ -710,3 +710,20 @@
 .dh-meta-row select {
   width: 100%; font-size: 12px;
 }
+
+/* === v0.3.1: readout cliccabili (Evasione/Soglie pop-up) === */
+.dh-readout-click {
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+  border: 1px solid var(--dh-gold) !important;
+}
+.dh-readout-click:hover {
+  background: var(--dh-gold) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(139,105,20,.3);
+}
+.dh-readout-click:hover span,
+.dh-readout-click:hover strong { color: #fff !important; }
+.dh-difesa-note { grid-column: 1 / -1; text-align: center; padding-top: .25rem; }
+.dh-soglie-hint { grid-column: 1 / -1; font-size: 10px; color: var(--dh-fg-dim); text-align: center; }

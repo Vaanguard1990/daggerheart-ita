@@ -23,7 +23,7 @@
       "livello":   { "value": 1 },
       "competenza": { "value": 1 },
       "evasione":   { "value": 10, "bonus": 0 },
-      "soglie":     { "maggiore": 6, "grave": 12 },
+      "soglie":     { "maggiore": 6, "grave": 12, "override": null },
       "armatura":   { "value": 0, "max": 0 },
       "speranza":   { "value": 2, "max": 6 },
       "classe":     "",

@@ -38,8 +38,8 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       longRest:        DaggerheartCharacterSheet._longRest,
       avanzamento:     DaggerheartCharacterSheet._avanzamento,
       aggiungiCarta:   DaggerheartCharacterSheet._aggiungiCarta,
-      aggiungiArma:    DaggerheartCharacterSheet._aggiungiArma,
-      aggiungiArmatura: DaggerheartCharacterSheet._aggiungiArmatura
+      modEvasione:     DaggerheartCharacterSheet._modEvasione,
+      modSoglie:       DaggerheartCharacterSheet._modSoglie
     }
   };
 
@@ -55,59 +55,47 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     return this.actor?.name ?? "Personaggio";
   }
 
-  get title() {
-    return this.actor?.name ?? "Personaggio";
-  }
-
   async _prepareContext(options) {
     const sys = this.actor.system;
     const items = this.actor.items;
-
-    // Costruisci array celle (no helper Handlebars per array vuoto da numero)
-    const range = n => Array.from({ length: Math.max(0, n|0) }, (_, i) => i);
+    const range = n => Array.from({ length: Math.max(0, n | 0) }, (_, i) => i);
 
     return {
-      actor:  this.actor,
+      actor: this.actor,
       system: sys,
       config: DH,
       currentTab: this.tabGroups.primary,
       rollMode: this.rollMode,
       editMode: this.editMode,
       temaScuro: game.settings.get("daggerheart-ita", "temaScuro"),
-      // Items raggruppati
       armi:        items.filter(i => i.type === "weapon"),
       armature:    items.filter(i => i.type === "armor"),
       armaturaEquip: items.find(i => i.type === "armor" && i.system?.equipaggiato),
-      bonus: this.actor.system.bonus ?? { voci: [], toggles: [] },
-      bonusAttivi: this.actor.system.bonusAttivi ?? {},
-      formaAttiva: this.actor.system.formaAttiva ?? null,
-      compagno: this.actor.system.compagno ?? {},
-      cmpStressCells: range((this.actor.system.compagno?.stress?.max) ?? 3).map(i => ({ i, filled: i < (this.actor.system.compagno?.stress?.value ?? 0) })),
+      bonus: sys.bonus ?? { voci: [], toggles: [] },
+      bonusAttivi: sys.bonusAttivi ?? {},
+      formaAttiva: sys.formaAttiva ?? null,
+      compagno: sys.compagno ?? {},
+      cmpStressCells: range((sys.compagno?.stress?.max) ?? 3).map(i => ({ i, filled: i < (sys.compagno?.stress?.value ?? 0) })),
       formeBestiali: await this._caricaForme(),
-      isDruido: /druido/i.test(this.actor.system.classe ?? ""),
-      isRanger: /ranger/i.test(this.actor.system.classe ?? ""),
+      isDruido: /druido/i.test(sys.classe ?? ""),
+      isRanger: /ranger/i.test(sys.classe ?? ""),
       dbClassi: await SRD.getClassi(),
-      dbSottoclassi: await SRD.getSottoclassiPerClasse(this.actor.system.classe ?? ""),
+      dbSottoclassi: await SRD.getSottoclassiPerClasse(sys.classe ?? ""),
       dbDiscendenze: await SRD.getDiscendenze(),
       dbComunita: await SRD.getComunita(),
-      dbCarte: await SRD.getCarteDisponibili(this.actor.system.dominiClasse ?? [], this.actor.system.livello?.value ?? 10),
-      dbArmi: await SRD.getArmi(),
-      dbArmature: await SRD.getArmature(),
+      dbCarte: await SRD.getCarteDisponibili(sys.dominiClasse ?? [], sys.livello?.value ?? 10),
       privilegi:   items.filter(i => i.type === "feature"),
       esperienze:  items.filter(i => i.type === "experience"),
       dominii:     items.filter(i => i.type === "domainCard"),
-      inventario:  items.filter(i => ["inventory","consumable"].includes(i.type)),
-      // Celle per le tracce
+      inventario:  items.filter(i => ["inventory", "consumable"].includes(i.type)),
       cellsPf:    range(sys.pf?.max ?? 6).map(i => ({ i, filled: i < (sys.pf?.value ?? 0) })),
       cellsStress: range(sys.stress?.max ?? 6).map(i => ({ i, filled: i < (sys.stress?.value ?? 0) })),
       cellsArmor: range(sys.armatura?.max ?? 0).map(i => ({ i, filled: i < (sys.armatura?.value ?? 0) })),
       cellsHope:  range(sys.speranza?.max ?? 6).map(i => ({ i, filled: i < (sys.speranza?.value ?? 0) })),
-      // Tratti ordinati con segno
       trattiList: Object.entries(DH.tratti).map(([key, label]) => {
         const v = sys.tratti?.[key]?.valore ?? 0;
         return { key, label, valore: v, segno: v >= 0 ? "+" : "" };
       }),
-      // Tabs
       tabs: this._buildTabs()
     };
   }
@@ -129,8 +117,7 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     if (!/druido/i.test(this.actor.system.classe ?? "")) return [];
     if (this._formeCache) return this._formeCache;
     try {
-      const url = "systems/daggerheart-ita/assets/srd/all.json";
-      const data = await foundry.utils.fetchJsonWithTimeout(url);
+      const data = await foundry.utils.fetchJsonWithTimeout("systems/daggerheart-ita/assets/srd/all.json");
       const lv = this.actor.system.livello?.value ?? 1;
       const rango = DH.rangoDaLivello(lv);
       this._formeCache = (data.FORME_BESTIALI ?? []).filter(f => (f.r ?? 1) <= rango);
@@ -141,13 +128,29 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
     }
   }
 
+  /** Aggancia i listener nativi ai selettori SRD dopo ogni render. */
+  _onRender(context, options) {
+    super._onRender(context, options);
+    const root = this.element;
+    if (!root) return;
+    const map = {
+      classe:      (v) => Applica.applicaClasse(this.actor, v),
+      sottoclasse: (v) => Applica.applicaSottoclasse(this.actor, v),
+      discendenza: (v) => Applica.applicaDiscendenza(this.actor, v),
+      comunita:    (v) => Applica.applicaComunita(this.actor, v)
+    };
+    for (const [key, fn] of Object.entries(map)) {
+      const el = root.querySelector(`[data-sel="${key}"]`);
+      if (el) el.addEventListener("change", (ev) => fn(ev.target.value));
+    }
+  }
+
   // === ACTIONS ===
 
   static _changeTab(event, target) {
     const tab = target.dataset.tab;
     if (!tab || tab === this.tabGroups.primary) return;
     this.tabGroups.primary = tab;
-    // Switch CSS senza re-render completo
     const root = this.element;
     root.querySelectorAll(".dh-tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
     root.querySelectorAll(".dh-tab-content").forEach(c => c.classList.toggle("active", c.dataset.tabContent === tab));
@@ -165,6 +168,14 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
   static _toggleEditMode() {
     this.editMode = !this.editMode;
     this.render();
+  }
+
+  static async _toggleBonus(event, target) {
+    const key = target.dataset.key;
+    if (!key) return;
+    const cur = foundry.utils.duplicate(this.actor.system.bonusAttivi ?? {});
+    cur[key] = !cur[key];
+    await this.actor.update({ "system.bonusAttivi": cur });
   }
 
   static async _tiraTratto(event, target) {
@@ -281,6 +292,69 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
       "system.speranza.value": Math.max(this.actor.system.speranza?.value ?? 0, 2)
     });
   }
+
+  static async _avanzamento() {
+    return apriAvanzamento(this.actor);
+  }
+
+  static async _aggiungiCarta(event, target) {
+    const sel = this.element.querySelector('[data-add="carta"]');
+    if (!sel || !sel.value) return;
+    const [dominio, nome] = sel.value.split("||");
+    await Applica.aggiungiCarta(this.actor, dominio, nome);
+  }
+
+  // === MODIFICA EVASIONE / SOGLIE (pop-up) ===
+
+  static async _modEvasione() {
+    const cur = this.actor.system.evasione?.value ?? 10;
+    const v = await foundry.applications.api.DialogV2.prompt({
+      window: { title: "Modifica Evasione base" },
+      content: `<p>Valore base dell'Evasione (i bonus si sommano in automatico):</p>
+        <input type="number" name="ev" value="${cur}" autofocus style="width:100%;"/>`,
+      ok: {
+        label: "Salva",
+        callback: (e, button) => parseInt(button.form.elements.ev.value, 10)
+      }
+    }).catch(() => null);
+    if (Number.isFinite(v)) await this.actor.update({ "system.evasione.value": v });
+  }
+
+  static async _modSoglie() {
+    const s = this.actor.system.soglie ?? {};
+    const ov = s.override ?? {};
+    const content = `
+      <p>Le soglie derivano dall'armatura + livello. Imposta qui un <strong>override manuale</strong> (lascia vuoto per usare il calcolo automatico).</p>
+      <div style="display:flex; gap:.5rem;">
+        <label style="flex:1;">Maggiore (base)<input type="number" name="magg" value="${Number.isFinite(ov.maggiore) ? ov.maggiore : ""}" style="width:100%;"/></label>
+        <label style="flex:1;">Grave (base)<input type="number" name="grav" value="${Number.isFinite(ov.grave) ? ov.grave : ""}" style="width:100%;"/></label>
+      </div>
+      <p style="font-size:11px; opacity:.7;">Valori attuali calcolati: Maggiore ${s.maggioreTot ?? "-"}, Grave ${s.graveTot ?? "-"}.</p>`;
+    const res = await foundry.applications.api.DialogV2.prompt({
+      window: { title: "Modifica Soglie di Danno" },
+      content,
+      ok: {
+        label: "Salva",
+        callback: (e, button) => {
+          const m = button.form.elements.magg.value;
+          const g = button.form.elements.grav.value;
+          return {
+            maggiore: m === "" ? null : parseInt(m, 10),
+            grave:    g === "" ? null : parseInt(g, 10)
+          };
+        }
+      }
+    }).catch(() => null);
+    if (res) {
+      if (res.maggiore === null && res.grave === null) {
+        await this.actor.update({ "system.soglie.override": null });
+      } else {
+        await this.actor.update({ "system.soglie.override": res });
+      }
+    }
+  }
+
+  // === FORME BESTIALI / COMPAGNO ===
 
   static async _trasforma(event, target) {
     const nome = target.dataset.nome;

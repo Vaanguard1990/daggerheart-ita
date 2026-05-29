@@ -123,7 +123,9 @@
       "dominio":   "",
       "livello":   1,
       "tipo":      "Privilegio",
-      "ricarica":  ""
+      "ricarica":  "",
+      "costoSperanza": 0,
+      "gettoni": { "value": 0, "max": 0 }
     },
     "weapon": {
       "templates": ["base", "physical"],
@@ -154,7 +156,9 @@
       "templates": ["base"],
       "tipoPrivilegio": "Generico",
       "fonte":          "",
-      "ricarica":       ""
+      "ricarica":       "",
+      "costoSperanza": 0,
+      "gettoni": { "value": 0, "max": 0 }
     },
     "experience": {
       "templates": ["base"],

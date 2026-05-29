@@ -96,9 +96,13 @@
             <span class="dh-tratto-nome">{{t.label}}</span>
             <span class="dh-tratto-val">{{t.segno}}{{t.valore}}</span>
           </button>
-          <div class="dh-tratto-edit">
-            <input type="number" name="system.tratti.{{t.key}}.valore" value="{{t.valore}}" class="dh-tratto-input" {{#unless ../editMode}}readonly{{/unless}}/>
+          {{#if ../editMode}}
+          <div class="dh-tratto-edit dh-tratto-stepper">
+            <button type="button" class="dh-tratto-step dh-tratto-step-minus" data-action="trattoStep" data-tratto="{{t.key}}" data-delta="-1" title="Diminuisci">−</button>
+            <span class="dh-tratto-step-val">{{t.valore}}</span>
+            <button type="button" class="dh-tratto-step dh-tratto-step-plus" data-action="trattoStep" data-tratto="{{t.key}}" data-delta="1" title="Aumenta">+</button>
           </div>
+          {{/if}}
         </div>
       {{/each}}
     </div>
@@ -158,18 +162,26 @@
       {{#if armaturaEquip}}<span class="dh-info">Valori da {{armaturaEquip.name}}</span>{{/if}}
     </h3>
     <div class="dh-difesa-grid">
-      <button type="button" class="dh-readout dh-readout-click" data-action="modEvasione" title="Modifica Evasione base">
-        <span>Evasione</span><strong>{{system.evasione.totale}}</strong>
+      <button type="button" class="dh-readout dh-readout-click dh-readout-evasione" data-action="modEvasione" title="Clicca per modificare l'Evasione base">
+        <i class="fa-solid fa-shield-halved dh-readout-icon"></i>
+        <span class="dh-readout-label">Evasione</span>
+        <strong class="dh-readout-val">{{system.evasione.totale}}</strong>
       </button>
-      <button type="button" class="dh-readout dh-readout-click" data-action="modSoglie" title="Modifica Soglie">
-        <span>Soglia Maggiore</span><strong>{{system.soglie.maggioreTot}}</strong>
+      <button type="button" class="dh-readout dh-readout-click dh-readout-soglia" data-action="modSoglie" title="Clicca per modificare le Soglie">
+        <i class="fa-solid fa-heart-crack dh-readout-icon"></i>
+        <span class="dh-readout-label">Soglia Maggiore</span>
+        <strong class="dh-readout-val">{{system.soglie.maggioreTot}}</strong>
       </button>
-      <button type="button" class="dh-readout dh-readout-click" data-action="modSoglie" title="Modifica Soglie">
-        <span>Soglia Grave</span><strong>{{system.soglie.graveTot}}</strong>
+      <button type="button" class="dh-readout dh-readout-click dh-readout-soglia" data-action="modSoglie" title="Clicca per modificare le Soglie">
+        <i class="fa-solid fa-skull dh-readout-icon"></i>
+        <span class="dh-readout-label">Soglia Grave</span>
+        <strong class="dh-readout-val">{{system.soglie.graveTot}}</strong>
       </button>
-      <label>Competenza <input type="number" name="system.competenza.value" value="{{system.competenza.value}}" min="1" max="6" {{#unless editMode}}readonly{{/unless}}/></label>
+      <label class="dh-competenza-label"><i class="fa-solid fa-star"></i> Competenza
+        <input type="number" name="system.competenza.value" value="{{system.competenza.value}}" min="1" max="6" {{#unless editMode}}readonly{{/unless}}/>
+      </label>
       <div class="dh-difesa-note">
-        <span class="dh-info">Minore = 1 PF · sotto Maggiore = 1 PF · tra Maggiore e Grave = 2 PF · oltre Grave = 3 PF</span>
+        <span class="dh-info">sotto Maggiore = 1 PF · tra Maggiore e Grave = 2 PF · oltre Grave = 3 PF</span>
       </div>
     </div>
   </div>
@@ -316,12 +328,27 @@
     </div>
     <ul class="dh-list">
       {{#each dominii as |c|}}
-        <li class="dh-list-item" data-item-id="{{c.id}}">
-          <span class="dh-dominio-badge">{{c.system.dominio}}</span>
-          <strong>{{c.name}}</strong>
-          <span class="dh-arma-info">Lv {{c.system.livello}} · {{c.system.tipo}}</span>
-          <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+        <li class="dh-list-item dh-list-item-vert" data-item-id="{{c.id}}">
+          <div class="dh-row">
+            <span class="dh-dominio-badge">{{c.system.dominio}}</span>
+            <strong>{{c.name}}</strong>
+            <span class="dh-arma-info">Lv {{c.system.livello}} · {{c.system.tipo}}</span>
+            {{#if c.system.ricarica}}<span class="dh-ricarica-badge"><i class="fa-solid fa-rotate"></i> {{c.system.ricarica}}</span>{{/if}}
+            <div class="dh-item-actions">
+              {{#if (gt c.system.costoSperanza 0)}}<span class="dh-costo-badge"><i class="fa-solid fa-star"></i> ×{{c.system.costoSperanza}}</span>{{/if}}
+              <button type="button" class="dh-btn-mini dh-btn-attiva" data-action="attivaItem" title="Attiva / usa questa carta">▶ Usa</button>
+              {{#if (gt c.system.gettoni.max 0)}}
+              <span class="dh-gettoni">
+                <button type="button" class="dh-btn-icon" data-action="gettoniStep" data-delta="-1" title="Rimuovi gettone">−</button>
+                <span class="dh-gettoni-val">{{c.system.gettoni.value}}/{{c.system.gettoni.max}}</span>
+                <button type="button" class="dh-btn-icon" data-action="gettoniStep" data-delta="1" title="Aggiungi gettone">+</button>
+              </span>
+              {{/if}}
+              <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+          {{#if c.system.description}}<div class="dh-desc">{{c.system.description}}</div>{{/if}}
         </li>
       {{else}}<li class="dh-empty">Nessuna carta. Trascinala dalla cartella "Carte Dominio".</li>{{/each}}
     </ul>
@@ -339,8 +366,22 @@
             <strong>{{f.name}}</strong>
             <span class="dh-feat-tipo">{{f.system.tipoPrivilegio}}</span>
             {{#if f.system.fonte}}<span class="dh-feat-fonte">{{f.system.fonte}}</span>{{/if}}
-            <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+            {{#if f.system.ricarica}}<span class="dh-ricarica-badge"><i class="fa-solid fa-rotate"></i> {{f.system.ricarica}}</span>{{/if}}
+            <div class="dh-item-actions">
+              {{#if (gt f.system.costoSperanza 0)}}<span class="dh-costo-badge"><i class="fa-solid fa-star"></i> ×{{f.system.costoSperanza}}</span>{{/if}}
+              {{#unless (eq f.system.tipoPrivilegio "Passiva")}}
+              <button type="button" class="dh-btn-mini dh-btn-attiva" data-action="attivaItem" title="Attiva questo privilegio">▶ Usa</button>
+              {{/unless}}
+              {{#if (gt f.system.gettoni.max 0)}}
+              <span class="dh-gettoni">
+                <button type="button" class="dh-btn-icon" data-action="gettoniStep" data-delta="-1" title="Rimuovi gettone">−</button>
+                <span class="dh-gettoni-val">{{f.system.gettoni.value}}/{{f.system.gettoni.max}}</span>
+                <button type="button" class="dh-btn-icon" data-action="gettoniStep" data-delta="1" title="Aggiungi gettone">+</button>
+              </span>
+              {{/if}}
+              <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button type="button" class="dh-btn-icon dh-edit-only" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </div>
           {{#if f.system.description}}<div class="dh-desc">{{f.system.description}}</div>{{/if}}
         </li>

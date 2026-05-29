@@ -106,8 +106,22 @@
           <div class="dh-row">
             <span class="dh-feat-tipo">{{c.system.tipoPrivilegio}}</span>
             <strong>{{c.name}}</strong>
-            <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+            {{#if c.system.ricarica}}<span class="dh-ricarica-badge"><i class="fa-solid fa-rotate"></i> {{c.system.ricarica}}</span>{{/if}}
+            <div class="dh-item-actions">
+              {{#if (gt c.system.costoPaura 0)}}<span class="dh-costo-badge dh-costo-paura"><i class="fa-solid fa-skull"></i> ×{{c.system.costoPaura}}</span>{{/if}}
+              {{#unless (eq c.system.tipoPrivilegio "Passiva")}}
+              <button type="button" class="dh-btn-mini dh-btn-attiva dh-btn-attiva-fear" data-action="attivaCaratteristica" title="Attiva questa caratteristica">▶ Usa</button>
+              {{/unless}}
+              {{#if (gt c.system.gettoni.max 0)}}
+              <span class="dh-gettoni">
+                <button type="button" class="dh-btn-icon" data-action="gettoniStep" data-delta="-1" title="Rimuovi gettone">−</button>
+                <span class="dh-gettoni-val">{{c.system.gettoni.value}}/{{c.system.gettoni.max}}</span>
+                <button type="button" class="dh-btn-icon" data-action="gettoniStep" data-delta="1" title="Aggiungi gettone">+</button>
+              </span>
+              {{/if}}
+              <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </div>
           {{#if c.system.description}}<div class="dh-desc">{{c.system.description}}</div>{{/if}}
         </li>

@@ -126,6 +126,8 @@
       "ricarica":  "",
       "costoSperanza": 0,
       "costoStress":   0,
+      "recallCost":    0,
+      "inVault":       false,
       "gettoni": { "value": 0, "max": 0 }
     },
     "weapon": {

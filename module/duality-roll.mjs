@@ -1,8 +1,8 @@
 // Tiro Duality: 2d12 (Speranza + Paura) + bonus tratto + modificatori
-//  - se Speranza > Paura: "con Speranza" (PG guadagna 1 Speranza in caso di successo)
-//  - se Paura > Speranza: "con Paura" (GM guadagna 1 Paura)
-//  - se uguali (doppio): "Critico!" (successo automatico, +1 Speranza, rimuove 1 Stress)
-//  - vs Difficoltà (DC): >= DC = successo
+//  - se Speranza > Paura: "con Speranza" → PG guadagna 1 Speranza (successo o fallimento)
+//  - se Paura > Speranza: "con Paura"    → GM guadagna 1 Paura (successo o fallimento)
+//  - se uguali (doppio):  "Critico!"     → successo automatico, +1 Speranza, rimuove 1 Stress
+//  - vs Difficoltà (DC): totale >= DC = successo
 //
 // Vantaggio / Svantaggio: si aggiunge / sottrae 1d6 al totale (regola Daggerheart, non advantage classico).
 
@@ -59,7 +59,7 @@ export class DualityRoll {
       esito = totale >= difficolta ? "successo" : "fallimento";
     }
 
-    // Aggiornamento Speranza/Paura
+    // Aggiornamento Speranza/Paura — indipendente da successo/fallimento
     let speranzaGain = 0;
     let paura      = 0;
     let stressHeal = 0;

@@ -93,12 +93,11 @@ export class DaggerheartActor extends Actor {
       else if (danno < (sg?.grave ?? 0)) pfPersi = 2;
       else pfPersi = 3;
     } else {
-      // PG: Minore (1 PF), Maggiore (2 PF), Grave (3 PF), Massiccio (4 PF)
-      if (danno < sg.maggiore) pfPersi = 1;
-      else if (danno < sg.grave) pfPersi = 2;
+      // PG: confronta con le soglie TOTALI (base + bonus da armatura/privilegi/carte)
+      if (danno < sg.maggioreTot) pfPersi = 1;
+      else if (danno < sg.graveTot) pfPersi = 2;
       else pfPersi = 3;
-      // Massiccio: > 2x soglia grave
-      if (danno >= sg.grave * 2) pfPersi = 4;
+      if (danno >= sg.graveTot * 2) pfPersi = 4;
     }
     const pfCur = this.system.pf.value ?? 0;
     const next = Math.min(this.system.pf.max ?? 1, pfCur + pfPersi);

@@ -258,6 +258,30 @@
 .dh-tracker-buttons button:hover { background: var(--dh-gold); color: #fff; border-color: var(--dh-gold); }
 .dh-tracker-footer { text-align: center; margin-top: .25rem; }
 
+/* === Countdown tracker (mondo) === */
+.dh-countdowns { padding: .5rem; display: flex; flex-direction: column; gap: .5rem; }
+.dh-countdown { padding: .5rem; background: var(--dh-card); border: 1px solid var(--dh-border); border-left: 4px solid var(--dh-gold); border-radius: 4px; }
+.dh-countdown-head { display: flex; justify-content: space-between; align-items: center; gap: .35rem; margin-bottom: .35rem; }
+.dh-countdown-nome { flex: 1; font-weight: 700; color: var(--dh-fg); background: transparent; border: none; border-bottom: 1px solid transparent; }
+.dh-countdown-nome:focus { border-bottom-color: var(--dh-gold); outline: none; }
+.dh-countdown-num { font-weight: 800; color: var(--dh-gold); font-size: 14px; }
+.dh-countdown-cells { display: flex; flex-wrap: wrap; gap: .15rem; margin: .35rem 0; }
+.dh-countdown-cell { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--dh-border); background: var(--dh-bg); }
+.dh-countdown-regressivo .dh-countdown-cell.filled { background: var(--dh-fear); border-color: #3a1818; }
+.dh-countdown-progressivo .dh-countdown-cell.filled { background: var(--dh-gold); border-color: #6b4a14; }
+.dh-countdown-controls { display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; }
+.dh-countdown-controls select, .dh-countdown-controls input { padding: .15rem; font-size: 11px; background: var(--dh-bg); border: 1px solid var(--dh-border); color: var(--dh-fg); border-radius: 3px; }
+.dh-countdown-max { width: 48px; }
+.dh-countdowns-footer { text-align: center; margin-top: .25rem; }
+.dh-countdowns-footer button { padding: .35rem .65rem; background: var(--dh-card); border: 1px solid var(--dh-border); color: var(--dh-fg); border-radius: 3px; cursor: pointer; font-weight: 700; }
+.dh-countdowns-footer button:hover { background: var(--dh-gold); color: #fff; border-color: var(--dh-gold); }
+
+/* Countdown inline (carte/privilegi/ambiente) */
+.dh-countdown-inline { display: inline-flex; align-items: center; gap: .15rem; padding: 0 .25rem; border-left: 1px solid var(--dh-border); }
+.dh-countdown-inline > i { color: var(--dh-gold); font-size: 11px; }
+.dh-countdown-actor { display: flex; gap: .35rem; align-items: center; flex-wrap: wrap; }
+.dh-countdown-trigger { padding: .4rem; border: 1px solid var(--dh-gold); border-radius: 4px; background: var(--dh-card); color: var(--dh-gold); font-weight: 700; }
+
 /* Chat: Duality card */
 .dh-duality-card { border: 2px solid var(--dh-border); border-radius: 6px; padding: .5rem; background: linear-gradient(180deg, var(--dh-bg-2), var(--dh-bg)); color: var(--dh-fg); }
 .dh-duality-card.dh-crit { border-color: var(--dh-crit); box-shadow: 0 0 12px rgba(184,134,11,.4); }

@@ -14,7 +14,9 @@ export class DaggerheartEnvironmentSheet extends HandlebarsApplicationMixin(Acto
       changeTab:  DaggerheartEnvironmentSheet._changeTab,
       itemEdit:   DaggerheartEnvironmentSheet._itemEdit,
       itemDelete: DaggerheartEnvironmentSheet._itemDelete,
-      itemCreate: DaggerheartEnvironmentSheet._itemCreate
+      itemCreate: DaggerheartEnvironmentSheet._itemCreate,
+      countdownActorStep:  DaggerheartEnvironmentSheet._countdownActorStep,
+      countdownActorReset: DaggerheartEnvironmentSheet._countdownActorReset
     }
   };
 
@@ -55,4 +57,27 @@ export class DaggerheartEnvironmentSheet extends HandlebarsApplicationMixin(Acto
   static async _itemEdit(event, target)   { this.actor.items.get(target.closest("[data-item-id]")?.dataset.itemId)?.sheet.render(true); }
   static async _itemDelete(event, target) { this.actor.items.get(target.closest("[data-item-id]")?.dataset.itemId)?.delete(); }
   static async _itemCreate() { Item.create({ name: "Nuova caratteristica", type: "feature" }, { parent: this.actor }); }
+
+  static async _countdownActorStep(event, target) {
+    const cd = this.actor.system.countdown ?? {};
+    const max = cd.max ?? 0;
+    if (max <= 0) return;
+    const delta = parseInt(target.dataset.delta, 10);
+    const verso = cd.tipo === "progressivo" ? 1 : -1;
+    const nuovo = Math.max(0, Math.min(max, (cd.valore ?? 0) + delta * verso));
+    await this.actor.update({ "system.countdown.valore": nuovo });
+    const soglia = cd.tipo === "progressivo" ? max : 0;
+    if (nuovo === soglia) {
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<div class="dh-countdown-trigger"><i class="fa-solid fa-hourglass-end"></i> Il countdown <strong>${cd.nome || this.actor.name}</strong> è scattato!</div>`
+      });
+    }
+  }
+
+  static async _countdownActorReset() {
+    const cd = this.actor.system.countdown ?? {};
+    const val = cd.tipo === "progressivo" ? 0 : (cd.max ?? 0);
+    await this.actor.update({ "system.countdown.valore": val });
+  }
 }

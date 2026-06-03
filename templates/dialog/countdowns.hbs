@@ -1,0 +1,47 @@
+<div class="dh-countdowns">
+  {{#each countdowns as |cd|}}
+  <section class="dh-countdown" data-id="{{cd.id}}">
+    <div class="dh-countdown-head">
+      {{#if ../isGM}}
+        <input type="text" name="cd.{{cd.id}}.nome" value="{{cd.nome}}" class="dh-countdown-nome"/>
+      {{else}}
+        <span class="dh-countdown-nome">{{cd.nome}}</span>
+      {{/if}}
+      <span class="dh-countdown-num">{{cd.valore}} / {{cd.max}}</span>
+    </div>
+
+    <div class="dh-countdown-cells dh-countdown-{{cd.tipo}}">
+      {{#each cd.cells as |on|}}
+        <span class="dh-countdown-cell {{#if on}}filled{{/if}}"></span>
+      {{/each}}
+    </div>
+
+    {{#if ../isGM}}
+    <div class="dh-countdown-controls">
+      <button type="button" class="dh-btn-icon" data-action="step" data-id="{{cd.id}}" data-delta="1"  title="Avanza">▶</button>
+      <button type="button" class="dh-btn-icon" data-action="step" data-id="{{cd.id}}" data-delta="-1" title="Indietro">◀</button>
+      <button type="button" class="dh-btn-icon" data-action="reset" data-id="{{cd.id}}" title="Reset">↺</button>
+      <select name="cd.{{cd.id}}.tipo" class="dh-countdown-tipo" title="Tipo">
+        <option value="regressivo"  {{#if (eq cd.tipo "regressivo")}}selected{{/if}}>↓ Regressivo</option>
+        <option value="progressivo" {{#if (eq cd.tipo "progressivo")}}selected{{/if}}>↑ Progressivo</option>
+      </select>
+      <select name="cd.{{cd.id}}.avanzamento" class="dh-countdown-adv" title="Avanzamento">
+        <option value="standard" {{#if (eq cd.avanzamento "standard")}}selected{{/if}}>Standard</option>
+        <option value="dinamico" {{#if (eq cd.avanzamento "dinamico")}}selected{{/if}}>Dinamico</option>
+        <option value="evento"   {{#if (eq cd.avanzamento "evento")}}selected{{/if}}>Per Evento</option>
+      </select>
+      <input type="number" name="cd.{{cd.id}}.max" value="{{cd.max}}" min="1" max="20" class="dh-countdown-max" title="Soglia"/>
+      <button type="button" class="dh-btn-icon dh-btn-warn" data-action="del" data-id="{{cd.id}}" title="Elimina"><i class="fa-solid fa-trash"></i></button>
+    </div>
+    {{/if}}
+  </section>
+  {{else}}
+  <p class="dh-empty">Nessun countdown attivo.</p>
+  {{/each}}
+
+  {{#if isGM}}
+  <div class="dh-countdowns-footer">
+    <button type="button" data-action="add"><i class="fa-solid fa-plus"></i> Nuovo Countdown</button>
+  </div>
+  {{/if}}
+</div>

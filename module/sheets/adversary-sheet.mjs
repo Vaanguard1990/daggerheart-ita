@@ -22,7 +22,8 @@ export class DaggerheartAdversarySheet extends HandlebarsApplicationMixin(ActorS
       itemCreate:           DaggerheartAdversarySheet._itemCreate,
       spendiPaura:          DaggerheartAdversarySheet._spendiPaura,
       attivaCaratteristica: DaggerheartAdversarySheet._attivaCaratteristica,
-      gettoniStep:          DaggerheartAdversarySheet._gettoniStep
+      gettoniStep:          DaggerheartAdversarySheet._gettoniStep,
+      countdownItemStep:    DaggerheartAdversarySheet._countdownItemStep
     }
   };
 
@@ -177,5 +178,25 @@ export class DaggerheartAdversarySheet extends HandlebarsApplicationMixin(ActorS
     const cur = it.system.gettoni?.value ?? 0;
     const max = it.system.gettoni?.max ?? 0;
     await it.update({ "system.gettoni.value": Math.max(0, Math.min(max, cur + delta)) });
+  }
+
+  static async _countdownItemStep(event, target) {
+    const id = target.closest("[data-item-id]")?.dataset.itemId;
+    const it = this.actor.items.get(id);
+    if (!it) return;
+    const cd = it.system.countdown ?? {};
+    const max = cd.max ?? 0;
+    if (max <= 0) return;
+    const delta = parseInt(target.dataset.delta, 10);
+    const verso = cd.tipo === "progressivo" ? 1 : -1;
+    const nuovo = Math.max(0, Math.min(max, (cd.valore ?? 0) + delta * verso));
+    await it.update({ "system.countdown.valore": nuovo });
+    const soglia = cd.tipo === "progressivo" ? max : 0;
+    if (nuovo === soglia) {
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<div class="dh-countdown-trigger"><i class="fa-solid fa-hourglass-end"></i> Il countdown <strong>${cd.nome || it.name}</strong> è scattato!</div>`
+      });
+    }
   }
 }

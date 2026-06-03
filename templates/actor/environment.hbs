@@ -22,6 +22,25 @@
 
 <section class="dh-tab-content {{#if (eq currentTab 'overview')}}active{{/if}}" data-tab-content="overview">
   <div class="dh-block">
+    <h3 class="dh-block-title">Countdown</h3>
+    <div class="dh-row dh-countdown-actor">
+      <input type="text" name="system.countdown.nome" value="{{system.countdown.nome}}" placeholder="Nome countdown"/>
+      <select name="system.countdown.tipo">
+        <option value="regressivo"  {{#if (eq system.countdown.tipo "regressivo")}}selected{{/if}}>↓ Regressivo</option>
+        <option value="progressivo" {{#if (eq system.countdown.tipo "progressivo")}}selected{{/if}}>↑ Progressivo</option>
+      </select>
+      <input type="number" name="system.countdown.max" value="{{system.countdown.max}}" min="0" max="20" title="Soglia (0 = nessuno)"/>
+      {{#if (gt system.countdown.max 0)}}
+      <span class="dh-countdown-inline">
+        <button type="button" class="dh-btn-icon" data-action="countdownActorStep" data-delta="-1" title="Indietro">◀</button>
+        <span class="dh-gettoni-val">{{system.countdown.valore}}/{{system.countdown.max}}</span>
+        <button type="button" class="dh-btn-icon" data-action="countdownActorStep" data-delta="1" title="Avanza">▶</button>
+        <button type="button" class="dh-btn-icon" data-action="countdownActorReset" title="Reset">↺</button>
+      </span>
+      {{/if}}
+    </div>
+  </div>
+  <div class="dh-block">
     <h3 class="dh-block-title">Impeti</h3>
     <textarea name="system.impeti" rows="4" style="width:100%;">{{system.impeti}}</textarea>
   </div>

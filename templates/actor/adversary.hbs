@@ -119,6 +119,14 @@
                 <button type="button" class="dh-btn-icon" data-action="gettoniStep" data-delta="1" title="Aggiungi gettone">+</button>
               </span>
               {{/if}}
+              {{#if (gt c.system.countdown.max 0)}}
+              <span class="dh-countdown-inline" title="{{c.system.countdown.nome}}">
+                <i class="fa-solid fa-hourglass-half"></i>
+                <button type="button" class="dh-btn-icon" data-action="countdownItemStep" data-delta="-1" title="Indietro">◀</button>
+                <span class="dh-gettoni-val">{{c.system.countdown.valore}}/{{c.system.countdown.max}}</span>
+                <button type="button" class="dh-btn-icon" data-action="countdownItemStep" data-delta="1" title="Avanza">▶</button>
+              </span>
+              {{/if}}
               <button type="button" class="dh-btn-icon" data-action="itemEdit"><i class="fa-solid fa-pen-to-square"></i></button>
               <button type="button" class="dh-btn-icon" data-action="itemDelete"><i class="fa-solid fa-trash"></i></button>
             </div>

@@ -7,6 +7,8 @@ import { DaggerheartEnvironmentSheet } from "./sheets/environment-sheet.mjs";
 import { DaggerheartItemSheet } from "./sheets/item-sheet.mjs";
 import { registerHopeFearSettings } from "./hope-fear.mjs";
 import { openTracker, refreshTracker } from "./hope-fear-tracker.mjs";
+import { registerCountdownSettings } from "./countdowns.mjs";
+import { openCountdowns, refreshCountdowns } from "./countdown-tracker.mjs";
 import { DualityRoll } from "./duality-roll.mjs";
 import { importSRD } from "./srd-import.mjs";
 import { registerHelpers } from "./handlebars-helpers.mjs";
@@ -20,7 +22,7 @@ Hooks.once("init", async () => {
   registerAutoImport();
 
   // API globale
-  game.daggerheart = { DH, DualityRoll, importSRD, openHopeFearTracker: openTracker };
+  game.daggerheart = { DH, DualityRoll, importSRD, openHopeFearTracker: openTracker, openCountdowns };
   CONFIG.DH = DH;
 
   // Document classes
@@ -47,6 +49,7 @@ Hooks.once("init", async () => {
 
   // Settings
   registerHopeFearSettings();
+  registerCountdownSettings();
 
   // Pre-load partials (Handlebars)
   const base = `systems/${SYS}/templates/item/parts`;
@@ -74,6 +77,7 @@ Hooks.once("init", async () => {
 Hooks.once("ready", () => {
   console.log("Daggerheart ITA | ready");
   Hooks.on("daggerheart.hopeFearChanged", () => refreshTracker());
+  Hooks.on("daggerheart.countdownsChanged", () => refreshCountdowns());
   if (game.user.isGM) openTracker();
 });
 
@@ -88,10 +92,14 @@ Hooks.on("renderActorDirectory", (app, html) => {
     <button type="button" class="dh-btn" data-act="hopefear">
       <i class="fa-solid fa-skull"></i> Speranza / Paura
     </button>
+    <button type="button" class="dh-btn" data-act="countdown">
+      <i class="fa-solid fa-hourglass-half"></i> Countdown
+    </button>
     <button type="button" class="dh-btn" data-act="import">
       <i class="fa-solid fa-download"></i> Importa SRD
     </button>`;
   bar.querySelector('[data-act="hopefear"]').addEventListener("click", () => openTracker());
+  bar.querySelector('[data-act="countdown"]').addEventListener("click", () => openCountdowns());
   bar.querySelector('[data-act="import"]').addEventListener("click", () => importSRD());
   const header = root.querySelector(".directory-header") || root.firstElementChild;
   header?.parentNode?.insertBefore(bar, header.nextSibling);

@@ -120,11 +120,17 @@ export class DaggerheartCharacterSheet extends HandlebarsApplicationMixin(ActorS
 
   async _caricaForme() {
     if (!/druido/i.test(this.actor.system.classe ?? "")) return [];
+    const lv = this.actor.system.livello?.value ?? 1;
+    const rango = DH.rangoDaLivello(lv);
+    // Invalidate cache when rango changes
+    if (this._formeCacheRango !== rango) {
+      this._formeCache = null;
+      this._formeCacheRango = rango;
+    }
     if (this._formeCache) return this._formeCache;
     try {
-      const data = await foundry.utils.fetchJsonWithTimeout("systems/daggerheart-ita/assets/srd/all.json");
-      const lv = this.actor.system.livello?.value ?? 1;
-      const rango = DH.rangoDaLivello(lv);
+      const data = DaggerheartCharacterSheet._srdCache
+        ?? (DaggerheartCharacterSheet._srdCache = await foundry.utils.fetchJsonWithTimeout("systems/daggerheart-ita/assets/srd/all.json"));
       this._formeCache = (data.FORME_BESTIALI ?? []).filter(f => (f.r ?? 1) <= rango);
       return this._formeCache;
     } catch (e) {

@@ -34,11 +34,11 @@ export class HopeFearTracker extends HandlebarsApplicationMixin(ApplicationV2) {
     };
   }
 
-  static async _addFear() { const hf = getHopeFear(); await setHopeFear({ paura: (hf.paura ?? 0) + 1 }); this.render(); }
-  static async _subFear() { const hf = getHopeFear(); await setHopeFear({ paura: (hf.paura ?? 0) - 1 }); this.render(); }
-  static async _addHope() { const hf = getHopeFear(); await setHopeFear({ speranzaGruppo: (hf.speranzaGruppo ?? 0) + 1 }); this.render(); }
-  static async _subHope() { const hf = getHopeFear(); await setHopeFear({ speranzaGruppo: (hf.speranzaGruppo ?? 0) - 1 }); this.render(); }
-  static async _reset()   { await setHopeFear({ paura: 0, speranzaGruppo: 0 }); this.render(); }
+  static async _addFear() { const hf = getHopeFear(); await setHopeFear({ paura: (hf.paura ?? 0) + 1 }); }
+  static async _subFear() { const hf = getHopeFear(); await setHopeFear({ paura: (hf.paura ?? 0) - 1 }); }
+  static async _addHope() { const hf = getHopeFear(); await setHopeFear({ speranzaGruppo: (hf.speranzaGruppo ?? 0) + 1 }); }
+  static async _subHope() { const hf = getHopeFear(); await setHopeFear({ speranzaGruppo: (hf.speranzaGruppo ?? 0) - 1 }); }
+  static async _reset()   { await setHopeFear({ paura: 0, speranzaGruppo: 0 }); }
 }
 
 let instance = null;

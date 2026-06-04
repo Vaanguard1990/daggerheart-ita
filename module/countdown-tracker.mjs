@@ -28,15 +28,14 @@ export class CountdownTracker extends HandlebarsApplicationMixin(ApplicationV2) 
   async _prepareContext() {
     const list = getCountdowns().map(cd => ({
       ...cd,
-      cells: Array.from({ length: cd.max }, (_, i) =>
-        cd.tipo === "progressivo" ? i < cd.valore : i < cd.valore)
+      cells: Array.from({ length: cd.max }, (_, i) => i < cd.valore)
     }));
     return { countdowns: list, isGM: game.user.isGM };
   }
 
-  static async _add()   { await addCountdown(); this.render(); }
-  static async _del(_e, t)   { await removeCountdown(t.dataset.id); this.render(); }
-  static async _reset(_e, t) { await resetCountdown(t.dataset.id); this.render(); }
+  static async _add()   { await addCountdown(); }
+  static async _del(_e, t)   { await removeCountdown(t.dataset.id); }
+  static async _reset(_e, t) { await resetCountdown(t.dataset.id); }
 
   static async _step(_e, t) {
     const delta = Number(t.dataset.delta ?? 1);
@@ -46,21 +45,24 @@ export class CountdownTracker extends HandlebarsApplicationMixin(ApplicationV2) 
         content: `<div class="dh-countdown-trigger"><i class="fa-solid fa-hourglass-end"></i> Il countdown <strong>${cd.nome}</strong> è scattato!</div>`
       });
     }
-    this.render();
   }
 
   static async _onSubmit(_event, _form, formData) {
     const data = foundry.utils.expandObject(formData.object);
     const cds = data.cd ?? {};
+    // Batch all updates without triggering renders mid-loop; hook fires on final save
+    const list = getCountdowns();
     for (const [id, patch] of Object.entries(cds)) {
-      await updateCountdown(id, {
-        nome: patch.nome,
-        max: Number(patch.max),
-        tipo: patch.tipo,
-        avanzamento: patch.avanzamento
-      });
+      const cd = list.find(c => c.id === id);
+      if (!cd) continue;
+      cd.nome       = patch.nome       ?? cd.nome;
+      cd.max        = Math.max(1, Number(patch.max) || cd.max);
+      cd.tipo       = patch.tipo       ?? cd.tipo;
+      cd.avanzamento = patch.avanzamento ?? cd.avanzamento;
+      cd.valore     = Math.min(cd.max, Math.max(0, cd.valore ?? 0));
     }
-    this.render();
+    await game.settings.set("daggerheart-ita", "countdowns", list);
+    Hooks.callAll("daggerheart.countdownsChanged", list);
   }
 }
 

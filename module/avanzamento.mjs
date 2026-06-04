@@ -56,7 +56,7 @@ export async function apriAvanzamento(actor) {
 
   // ── Dialog principale (selezione caselle) ──
   const indici = await _dialogPrincipale(lv, nuovoLv, rango, opzioni);
-  if (indici === null) return;
+  if (!indici) return;
 
   // ── Raccogli dati per opzioni complesse tramite sub-dialog ──
   const updates   = { "system.livello.value": nuovoLv };
@@ -136,7 +136,7 @@ export async function apriAvanzamento(actor) {
           system: {
             description: r.descrizione ?? "",
             dominio: r.dominio, livello: r.livello,
-            costo: r.costo ?? null,
+            costoSperanza: r.costo ?? 0,
             tipo: r.tipo ?? "Privilegio",
             ricarica: r.ricarica ?? ""
           }
